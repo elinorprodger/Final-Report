@@ -1,0 +1,66 @@
+\appendix
+\section{Appendix}
+\label{appendix}
+%===============================================================
+\subsection{AI Use Declaration}
+To ensure transparency and uphold academic integrity, the following table outlines the artificial intelligence (AI) tools utilized during the preparation of this report. This declaration aligns with ETH Zurich's guidelines on the responsible use of AI in scientific writing.
+
+documentation?
+other figures not used?
+code?
+
+\subsection{Decking product database}
+\label{app:decking_db}
+The tables below list all profiled steel decking products included in the optimisation database, with geometry and section properties (Table~\ref{tab:deck_db_geom}) and structural resistances with EPD data (Table~\ref{tab:deck_db_resist}). Values are sourced from manufacturer technical manuals and EPD documents as referenced in Section~\ref{sec:database}.
+
+\input{decking_table}
+%===============================================================
+\subsection{Full-floor vibration check: worked example}
+\label{app:vibration}
+%===============================================================
+This appendix presents a complete bay-level vibration check for a representative office floor, following the full SCI~P354 method \citep{RefWorks:hicks2009p354}. It is included to demonstrate the full procedure that the slab-only screening check of Section~\ref{sec:vibration_method} approximates, and to quantify the extent to which the complete floor frequency --- with the slab supported on flexible beams --- falls below the slab-alone value. The calculation is implemented in \texttt{full\_vibration\_check.py}.
+
+\subsubsection*{Bay geometry and inputs}
+The worked example uses a representative office bay. The inputs that the slab-only optimisation cannot define --- and which the full check requires --- are stated explicitly below.
+\todo[inline]{Populate from full\_vibration\_check.py for the chosen representative bay. Fill in: secondary beam span, primary beam span, bay width, secondary/primary beam sections, slab depth and deck, concrete grade, damping ratio $\zeta$, and the design walking parameters.}
+
+\begin{table}[h!]
+\small
+\centering
+\caption{Bay geometry and design inputs for the worked vibration example.}
+\label{tab:vib_example_inputs}
+\begin{tabular}{lll}
+\toprule
+Parameter & Symbol & Value \\
+\midrule
+Secondary beam span        & $L_s$        & \todo{fill}\,m \\
+Primary beam span          & $L_p$        & \todo{fill}\,m \\
+Bay width                  & $w_\mathrm{bay}$ & \todo{fill}\,m \\
+Secondary beam section     & ---          & \todo{fill} \\
+Primary beam section       & ---          & \todo{fill} \\
+Slab depth / deck          & $h$          & \todo{fill}\,mm / \todo{fill} \\
+Concrete grade             & ---          & \todo{fill} \\
+Floor mass (perm.\ + $0.1Q_k$) & $m$      & \todo{fill}\,kg/m\textsuperscript{2} \\
+Damping ratio              & $\zeta$      & \todo{fill} (SCI~P354 Table~4.1) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Step 1 --- Component frequencies}
+The natural frequency of each component (slab, secondary beam, primary beam) is computed from its self-weight deflection $\delta$ under the vibrating mass using $f = 18/\sqrt{\delta_\mathrm{mm}}$ (SCI~P354 Eq.~4).
+\todo[inline]{Report $\delta$ and $f$ for the slab, secondary beam, and primary beam. Note the slab value here should match the slab-only screening value of Section~\ref{sec:vibration_method} for the same span.}
+
+\subsubsection*{Step 2 --- Combined floor frequency}
+The component frequencies are combined using Dunkerley's approximation to give the fundamental frequency of the floor system:
+\begin{equation}
+    \frac{1}{f_0^2} = \frac{1}{f_\mathrm{slab}^2} + \frac{1}{f_\mathrm{sec}^2} + \frac{1}{f_\mathrm{prim}^2}
+    \label{eq:dunkerley}
+\end{equation}
+\todo[inline]{Report the combined $f_0$ and compare it explicitly with the slab-alone frequency, stating the percentage reduction. This is the key quantitative point: the full-floor frequency is lower than the slab-alone screening value.}
+
+\subsubsection*{Step 3 --- Modal mass and response factor}
+The floor is classified as low- or high-frequency from $f_0$, the effective modal mass mobilised by walking is estimated, and the root-mean-square acceleration response is computed and expressed as a response factor $R$ relative to the BS~6472 base curve.
+\todo[inline]{Report: classification (low/high frequency), modal mass, RMS acceleration $a_\mathrm{rms}$, and the resulting response factor $R$. State the acceptance limit used (e.g.\ $R \le 8$ for general offices, SCI~P354) and whether the bay passes.}
+
+\subsubsection*{Discussion of the example}
+\todo[inline]{Close with 2--3 sentences: (1) whether the representative bay passes the full check; (2) how far the full-floor frequency sits below the slab-alone screening value, confirming the screening check is conservative-but-necessary as described in Section~\ref{sec:vibration_method}; (3) the implication for the optimisation results --- i.e.\ that at long office spans the full check would likely require a deeper section than the optimisation selects, as discussed in Section~\ref{sec:assumptions}.}

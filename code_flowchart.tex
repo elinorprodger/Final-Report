@@ -1,0 +1,132 @@
+% ============================================================================
+%  Composite slab optimisation workflow — flowchart for the Methodology chapter
+%  Boxes are colour-coded by source module; each box is tagged with the
+%  script and the class / function used at that stage.
+%
+%  Requires in MAIN.tex preamble:
+%     \usepackage{tikz}
+%     \usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
+%  Then include with:  \input{code_flowchart}   (inside a figure environment)
+% ============================================================================
+\begin{tikzpicture}[
+    font=\footnotesize,
+    node distance = 4mm and 10mm,
+    >={Stealth[length=2.2mm]},
+    line/.style   = {draw, ->, thick, rounded corners},
+    % --- module colours ---
+    entry/.style  = {rectangle, rounded corners=4pt, draw=violet!70, fill=violet!8,
+                     text width=44mm, align=center, inner sep=3pt},
+    driver/.style = {rectangle, draw=orange!85!black, fill=orange!12,
+                     text width=48mm, align=center, inner sep=3pt},
+    optim/.style  = {rectangle, draw=green!55!black, fill=green!10,
+                     text width=52mm, align=center, inner sep=3pt},
+    analysis/.style = {rectangle, draw=blue!70, fill=blue!8,
+                     text width=52mm, align=center, inner sep=3pt},
+    startstop/.style = {rectangle, rounded corners=7pt, draw=black!70, fill=black!8,
+                     text width=30mm, align=center, inner sep=3pt},
+    decision/.style = {diamond, aspect=2.2, draw=red!60!black, fill=red!7,
+                     text width=24mm, align=center, inner sep=1pt},
+    check/.style  = {rectangle, draw=blue!55, fill=blue!4, text width=64mm,
+                     align=left, inner sep=4pt, font=\scriptsize},
+]
+
+% ---- main vertical spine -------------------------------------------------
+\node[startstop] (start) {\textbf{Start}};
+
+\node[entry, below=of start] (inputs)
+   {Define inputs: occupancy, loads,\\ fire rating $R_\mathrm{fi}$, $\psi_\mathrm{fi}$, build-up\\
+    {\ttfamily\scriptsize simple/two/three\_span\_composite.py}\\ {\ttfamily\scriptsize FloorStruc}};
+
+\node[driver, below=of inputs] (cfg)
+   {\textbf{For each} span configuration (1, 2, 3 spans)\\
+    {\ttfamily\scriptsize run\_dataset() · n\_spans}};
+
+\node[driver, below=of cfg] (span)
+   {\textbf{For each} span $L$ (3--10\,m)\\
+    {\ttfamily\scriptsize plot\_datasets.py · \_build\_member\_list()}};
+
+\node[driver, below=of span] (deck)
+   {\textbf{For each} deck product \& concrete grade\\ {\scriptsize(Tata Steel, Kingspan; C25/30, C30/37)}\\
+    {\ttfamily\scriptsize Decking · ReadyMixedConcrete}};
+
+\node[optim, below=of deck] (opt)
+   {\textbf{Optimise depth $h$}\\ \texttt{minimize\_scalar} (Brent), minimise GWP\\ {\scriptsize(penalty for constraint violations)}\\
+    {\ttfamily\scriptsize struct\_optimization.py}\\ {\ttfamily\scriptsize opt\_comp\_slab() · comp\_slab\_rqs()}};
+
+\node[analysis, below=of opt] (checks)
+   {\textbf{Evaluate all limit states}\\
+    {\ttfamily\scriptsize struct\_analysis.py}\\ {\ttfamily\scriptsize CompositeSlab.run\_all\_checks()}};
+
+\node[decision, below=of checks] (feas) {All checks pass?};
+
+\node[driver, below=5mm of feas] (record)
+   {Record GWP, $h$, deck, propped status, governing check\\
+    {\ttfamily\scriptsize \_CompSlabMember}};
+
+\node[decision, below=of record]   (moredeck) {More deck/\\ concrete?};
+\node[decision, below=of moredeck]  (morespan) {More spans?};
+\node[decision, below=of morespan]  (morecfg)  {More configs?};
+
+\node[driver, below=of morecfg] (out)
+   {\textbf{Outputs:} min-GWP section per span;\\ GWP-vs-span plots vs RC/timber;\\ governing-check \& breakdown data\\
+    {\ttfamily\scriptsize plot\_from\_csv() · \_save\_to\_csv()}};
+
+\node[startstop, below=of out] (stop) {\textbf{End}};
+
+% ---- spine arrows --------------------------------------------------------
+\draw[line] (start) -- (inputs);
+\draw[line] (inputs) -- (cfg);
+\draw[line] (cfg) -- (span);
+\draw[line] (span) -- (deck);
+\draw[line] (deck) -- (opt);
+\draw[line] (opt) -- (checks);
+\draw[line] (checks) -- (feas);
+\draw[line] (feas) -- node[right, font=\scriptsize] {yes} (record);
+\draw[line] (record) -- (moredeck);
+\draw[line] (moredeck) -- node[right, font=\scriptsize] {no} (morespan);
+\draw[line] (morespan) -- node[right, font=\scriptsize] {no} (morecfg);
+\draw[line] (morecfg) -- node[right, font=\scriptsize] {no} (out);
+\draw[line] (out) -- (stop);
+
+% ---- feasibility "no" -> propped retry -----------------------------------
+\node[optim, right=12mm of feas, text width=34mm] (propped)
+   {Retry with \textbf{propped} construction {\scriptsize(if unpropped infeasible)}\\
+    {\ttfamily\scriptsize opt\_comp\_slab(propped=True)}};
+\draw[line] (feas.east) -- node[above, font=\scriptsize] {no} (propped.west);
+\draw[line] (propped.north) |- ($(checks.east)+(0,2mm)$);
+
+% ---- loop-back arrows ----------------------------------------------------
+\draw[line] (moredeck.west) -- node[above, font=\scriptsize] {yes} ++(-24mm,0) |- (deck.west);
+\draw[line] (morespan.west) -- node[above, font=\scriptsize] {yes} ++(-36mm,0) |- (span.west);
+\draw[line] (morecfg.west)  -- node[below, font=\scriptsize, pos=0.25] {yes} ++(-48mm,0) |- (cfg.west);
+
+% ---- run_all_checks expansion (right callout) ----------------------------
+\node[check, right=44mm of opt, anchor=north west] (cklist)
+  {\textbf{\texttt{CompositeSlab.run\_all\_checks()}} \hfill {\scriptsize\itshape struct\_analysis.py}\\
+   {\scriptsize via the \texttt{\_chk\_*} methods:}\\[2pt]
+   \textit{Construction stage (unpropped only)}\\
+   \;$\bullet$ ULS deck bending \;\; $\bullet$ ULS web shear\\
+   \;$\bullet$ SLS deflection (+ ponding)\\[2pt]
+   \textit{Composite stage}\\
+   \;$\bullet$ ULS sagging moment\\
+   \;$\bullet$ ULS longitudinal shear (m--k / $\tau_u$)\\
+   \;$\bullet$ ULS vertical shear\\
+   \;$\bullet$ ULS hogging (continuous spans)\\
+   \;$\bullet$ SLS deflection ($L/300$)\\[2pt]
+   \textit{Fire — EN 1994-1-2 Annex D (if $R_\mathrm{fi}\!>\!0$)}\\
+   \;$\bullet$ D1 insulation\\
+   \;$\bullet$ D2 sagging (+ trough bar selection)\\
+   \;$\bullet$ D3 hogging (continuous spans)\\
+   \;$\bullet$ D4 min.\ effective thickness\\
+   \;$\bullet$ D5 field of application};
+\draw[densely dashed, gray] (checks.east) -- (cklist.west);
+
+% ---- module legend (bottom-right) ----------------------------------------
+\node[check, draw=black!45, fill=white, text width=58mm, below=8mm of cklist.south west, anchor=north west] (legend)
+  {\textbf{Module key (colour)}\\[2pt]
+   \tikz\fill[violet!8,draw=violet!70](0,0)rectangle(2.6mm,2.6mm); \; \texttt{*\_span\_composite.py} — entry / setup\\
+   \tikz\fill[orange!12,draw=orange!85!black](0,0)rectangle(2.6mm,2.6mm); \; \texttt{plot\_datasets.py} — driver: loops, I/O\\
+   \tikz\fill[green!10,draw=green!55!black](0,0)rectangle(2.6mm,2.6mm); \; \texttt{struct\_optimization.py} — optimiser\\
+   \tikz\fill[blue!8,draw=blue!70](0,0)rectangle(2.6mm,2.6mm); \; \texttt{struct\_analysis.py} — cross-section \& checks};
+
+\end{tikzpicture}

@@ -1,0 +1,98 @@
+\section{Discussion}
+\label{fifthchapter}
+
+%===============================================================
+\subsection{Introduction}
+%===============================================================
+
+This chapter interprets the results presented in Chapter~\ref{fourthchapter} and situates them within the broader context of sustainable structural design. Section~\ref{sec:disc_govcheck} discusses the significance of SLS deflection as the dominant governing criterion. Section~\ref{sec:disc_gwpcomp} examines the environmental performance of composite slabs relative to the reinforced concrete baselines. Section~\ref{sec:disc_fire} addresses the influence of fire design on the optimal cross-section and its GWP implications. Section~\ref{sec:disc_vib} discusses the vibration serviceability limitation and its potential effect on the results. Section~\ref{sec:disc_limitations} reflects on the limitations of the methodology and their effect on the conclusions. Section~\ref{sec:disc_practice} comments on the practical implications of the findings for early-stage structural design.
+
+\todo[inline]{Update all sections once retail, industrial, and residential scenario results are available. Several subsections below currently draw on office single-span results only; crossover spans and scenario-dependent findings are left as TODOs.}
+
+%===============================================================
+\subsection{Stiffness, not strength, governs composite slab design}
+\label{sec:disc_govcheck}
+%===============================================================
+
+The most consistent finding across the office occupancy scenario is that SLS total deflection ($\delta_\mathrm{tot} \le L/300$) governs the optimal composite slab depth for the majority of practical span and configuration combinations, particularly at spans above 5--6\,m. This contrasts with the intuitive expectation that the ULS checks --- bending, longitudinal shear, or vertical shear --- would set the minimum section size; in practice, for the load intensities and span range considered, the composite section is able to satisfy all ULS requirements at a depth substantially shallower than that required to meet the deflection limit.
+
+This stiffness-governed behaviour is a direct consequence of the composite second moment of area growing as the cube of effective depth: doubling the slab depth from, say, 150\,mm to 300\,mm increases the elastic bending stiffness by approximately a factor of eight, while the applied bending moment increases only as the square of span. At short spans, structural capacity is more easily satisfied for a given depth, and fire insulation or minimum deck cover requirements set the binding constraint. At long spans, the deflection demand grows faster than the composite stiffness can accommodate at moderate depths, driving the section deeper.
+
+The consequence for GWP is significant. Because the dominant constraint is a stiffness limit rather than a strength limit, the marginal GWP increase with span is driven primarily by increased concrete volume (the dominant material by GWP contribution at longer spans), rather than by discrete increases in reinforcement or deck section. The GWP--span curve for composite slabs is therefore smooth and approximately quadratic in character, with no abrupt jumps associated with changes in governing mechanism over most of the span range.
+
+It is worth noting that the $L/300$ deflection limit adopted here (per SIA~263) is more conservative than the EN~1994-1-1 recommendation of $L/250$. \todo[inline]{Quantify the GWP reduction that would result from using $L/250$ instead of $L/300$, once the sensitivity analysis in Section~\ref{sec:res_sensitivity} is complete. The deflection limit has a first-order effect on the optimal GWP for this slab type.}
+
+%===============================================================
+\subsection{Environmental performance relative to RC baselines}
+\label{sec:disc_gwpcomp}
+%===============================================================
+
+\todo[inline]{Complete this section once the RC baseline comparison is available from the plots. Suggested structure below; replace placeholders with actual numbers once results are confirmed.}
+
+The primary objective of this study is to determine whether composite slab systems offer a lower embodied carbon than conventional reinforced concrete flat slabs across the practical span range for multi-storey construction. Based on the office single-span results, the following observations can be made.
+
+At short spans (3--5\,m), the composite slab GWP is \todo{[higher/lower/comparable]} than the RC flat slab baseline, reflecting the relatively high GWP intensity of structural steel compared to concrete per unit mass. At these spans, the composite section is dominated by the fire-minimum depth and deck contribution, with little structural optimisation possible; the RC flat slab benefits from simpler construction and lower material GWP intensity.
+
+At longer spans (7--10\,m), the composite slab shows \todo{[quantitative comparison vs RC flat slab]}, reflecting the structural efficiency advantage of separating tensile and compressive functions between the steel deck and the concrete topping. \todo{[Insert crossover span if observed.]}
+
+The comparison with the RC ribbed slab is particularly instructive, since ribbed slabs are themselves an attempt to improve material efficiency relative to flat slabs by removing concrete from the tensile zone. \todo[inline]{Discuss whether composite outperforms or underperforms the RC ribbed slab, and whether this changes with span.}
+
+The floor build-up GWP (approximately 19.6\,kg\,CO$_2$-eq/m for the office scenario) is fixed across all span lengths and all slab systems evaluated under the same occupancy. It therefore has a larger proportional influence on the comparison at short spans, where structural GWP is low, than at long spans. If the floor build-up were different for different slab systems --- for example, if the RC flat slab required a heavier screed to meet acoustic requirements that the composite slab can meet with a lighter build-up --- the comparison would shift. In this study, the same floor build-up is applied to both composite and RC systems under the same occupancy scenario, meaning the comparison is driven entirely by the structural cross-section GWP.
+
+%===============================================================
+\subsection{Influence of fire design}
+\label{sec:disc_fire}
+%===============================================================
+
+Fire design has a non-trivial influence on the optimal composite slab cross-section and its GWP, particularly at short spans. The thermal insulation check (D1) sets a minimum concrete depth above the ribs that, for shallow-rib profiles at short spans, exceeds the structurally required depth. This means that the minimum achievable structural depth --- and hence the minimum structural GWP --- is set by fire rather than by structural mechanics. For the office scenario at $L = 3$\,m, the D1 check is the sole governing limit state for the optimal configuration.
+
+The fire trough bar contribution to total structural GWP is modest (approximately 7\% at $L = 6$\,m for the office scenario) but non-negligible, and it represents material whose sole function is fire resistance. At higher fire combination factors $\psi_\mathrm{fi}$ (e.g.\ 0.9 for the industrial scenario), the fire moment demand $M_\mathrm{Ed,fi}$ is larger and a heavier trough bar is required, increasing this contribution. The sensitivity of optimal GWP to the fire resistance rating (R30 vs R60 vs R90) is therefore an important variable for designers selecting composite systems, and the R60 default adopted in this study represents a common but not universal requirement.
+
+\todo[inline]{Once the sensitivity analysis varying fire rating is complete, quantify the GWP penalty of R90 vs R60 and comment on whether the increase is predominantly from trough bars (D2 check) or from minimum depth requirements (D1/D4 checks).}
+
+The EN~1994-1-2 Annex D method used in this study is the standard Eurocode approach for UK and European practice; it is consistent with the approach used in the ComFlor design software and in the Kingspan Catalyst software for the deck types evaluated. The SCI NCCI document PN005c-GB provides further guidance for UK practice, particularly for the treatment of continuous slabs, and the results may differ marginally between the two approaches for some configurations. The Annex D method is considered adequate for the purposes of a comparative GWP study.
+
+%===============================================================
+\subsection{Vibration and the completeness of the SLS assessment}
+\label{sec:disc_vib}
+%===============================================================
+
+A significant limitation of the present study is the absence of a full vibration serviceability check incorporating beam and bay geometry (SCI~P354 methodology). As noted in Section~\ref{sec:vibration_method}, the slab-alone vibration check performed here provides a lower bound on the composite floor natural frequency; the actual bay frequency is higher due to the participation of supporting beams and adjacent bays.
+
+Nevertheless, even the slab-alone check is informative. \todo[inline]{Review the vibration\_slab\_alone.csv output and report: (1) at which spans and slab depths the slab-alone natural frequency falls below 4\,Hz; (2) whether any of the optimal office-scenario cross-sections from Table~\ref{tab:optimal_office_ss} are close to or below the 4\,Hz threshold; (3) whether a 4\,Hz slab-alone requirement would force a deeper section than the SLS deflection requirement already requires. Based on the CSV data available, ComFlor 210 slabs in the 290--350\,mm range at spans of 5--7\,m achieve slab-alone frequencies well above 4\,Hz; confirm whether this holds for the shallow profiles selected in the office optimal set.}
+
+For office floors, vibration is widely recognised as a critical serviceability criterion at spans above approximately 7\,m. If the full P354 check were applied and found to govern at these spans, the required slab depth would increase, with a corresponding increase in GWP. The practical implication is that the GWP advantage of composite slabs over RC at longer office spans may be somewhat reduced once vibration is properly accounted for, since deeper (heavier) sections increase the floor mass and therefore improve the vibration response to some extent, but the composite floor is more flexible than an equivalent-depth RC slab due to the partial void in the deck ribs. RC slabs benefit from higher mass per unit area at the same structural depth, which intrinsically dampens the vibration response. A full bay-level vibration assessment is therefore recommended before composite slabs are selected over RC on embodied carbon grounds at spans of 8\,m and above in office occupancy.
+
+%===============================================================
+\subsection{Limitations and their implications}
+\label{sec:disc_limitations}
+%===============================================================
+
+Several limitations of the methodology affect the confidence and scope of the results.
+
+\paragraph{Slab-only model.} The optimisation considers the slab cross-section in isolation and does not model the supporting beams, columns, or foundations. In a real building, the choice of slab system affects beam depth (particularly for composite downstand beams), structural weight, and storey height, all of which have further GWP implications. Slim floor systems with deep composite decking may reduce overall structural depth compared to RC flat slabs with conventional beams, generating facade and envelope savings not captured in the GWP comparison. \todo[inline]{Expand this point once the total building height comparison (``compare total height/building envelope within and across slab systems'' from the checklist) is completed.}
+
+\paragraph{EPD data quality and granularity.} The GWP of the steel deck is the most uncertain input in the calculation. Tata Steel publish profile-specific EPDs that allow product-by-product attribution; Kingspan publish a single EPD for the entire Multideck range, meaning that all Kingspan products receive the same GWP per unit mass regardless of profile thickness or rib geometry. This uniformity introduces an error whose sign depends on whether the optimised profile is lighter or heavier than the Kingspan EPD average. ArcelorMittal products are excluded from the main analysis precisely because this EPD granularity issue was judged to be most severe for their range. \todo[inline]{Quantify the sensitivity of the optimal GWP to a $\pm$20\% change in deck EPD intensity, to indicate the importance of EPD data quality on the comparative results.}
+
+\paragraph{Propping GWP not modelled.} The model does not include the GWP or cost of temporary propping. Propped construction is selected by the optimiser when it produces a lower structural GWP, but in practice the use of props increases construction time, labour cost, and may introduce additional material (prop systems, headplates, packers) with associated embodied carbon. Including a propping GWP penalty would shift the propped/unpropped crossover span and might favour shallower sections that pass the unpropped check at the expense of slightly higher structural GWP.
+
+\paragraph{Single-occupancy floor build-up.} The same floor build-up is applied to both composite and RC systems under the same occupancy. In practice, composite slabs with thinner structural depth might allow a deeper build-up within the same floor-to-floor height, enabling heavier screed or additional insulation, which could meet acoustic requirements without an acoustic penalty. Conversely, the lower slab mass of a composite system compared to a solid RC slab means that acoustic targets may require supplementary treatment that is not needed for RC. The assumed build-up is the same for both systems in this study, which may understate the real acoustic cost difference.
+
+\paragraph{Swiss vs UK context.} The SLS deflection limit of $L/300$ is taken from SIA~263 for consistency with the prior framework, while the construction-stage deflection limits follow the UK National Annex. The fire design method (EN~1994-1-2 Annex D) is consistent with both UK and Swiss practice. Swiss market availability of steel decking products is an additional consideration: the deck products in the database are primarily UK and European products, and availability in Switzerland should be verified before the results are applied in a Swiss design context. \todo[inline]{Add brief discussion of Swiss market availability and the ``hollowcore rib'' alternative if composite decking is unavailable locally.}
+
+%===============================================================
+\subsection{Practical implications for early-stage design}
+\label{sec:disc_practice}
+%===============================================================
+
+The results of this study provide several practically useful observations for structural engineers selecting between composite and RC slab systems at early design stages.
+
+First, composite slabs are stiffness-governed at all practical office spans above approximately 5\,m. This means that the structural designer's primary tool for reducing GWP in composite floor systems is to increase composite stiffness --- either by increasing total slab depth, selecting a deck with greater rib height, or by choosing propped construction. Simply improving the ULS capacity (e.g.\ by specifying a thicker or stronger deck) provides little GWP benefit if the deflection check already governs.
+
+Second, the fire design requirement has a first-order effect on minimum section depth at short spans. For composite slabs at 3--4\,m span, the fire insulation check (D1) sets the minimum concrete cover above the ribs and prevents the designer from using very shallow slabs that would otherwise be structurally adequate. The fire trough bar requirement (D2) adds a modest but measurable GWP contribution at all spans in the office scenario.
+
+Third, the floor build-up selected to meet acoustic requirements is a significant component of total GWP, particularly at short spans. For the office scenario, the non-structural build-up (approximately 19.6\,kg\,CO$_2$-eq/m) represents \todo{[X]\%} of total GWP at $L = 3$\,m, decreasing to \todo{[Y]\%} at $L = 10$\,m. Designers should therefore regard the acoustic and fire build-up as integral to the GWP assessment of floor systems and not focus solely on structural GWP.
+
+Finally, the comparison between composite and RC systems cannot be reduced to a single crossover span. The relative GWP performance depends on occupancy (imposed load and fire factor), span configuration (single vs continuous), and the assumed deflection limit. A more conservative deflection requirement (as in the Swiss context with $L/300$) disadvantages composite slabs more than RC, since composite sections are more sensitive to the deflection limit. Designers in the UK context, where $L/250$ is the typical limit, may find composite slabs competitive at shorter spans than the Swiss results suggest.
+
+\todo[inline]{Add a brief comment on how the conclusions of this study compare with those of \citet{RefWorks:regulez2022sustainability} and \citet{RefWorks:broyles2024equations}, who studied similar systems. Do the crossover spans align with prior literature? Are there differences attributable to the more detailed fire/SLS treatment in this study?}
