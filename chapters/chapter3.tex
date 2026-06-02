@@ -37,8 +37,6 @@ Deck products currently included in the database are drawn from the ComFlor rang
 
 Mechanical property data was obtained from the manufacturer technical manuals \citep{RefWorks:2017comflor, RefWorks:2021floors, RefWorks:kingspan2026multideck} as well as the manufacturers' design software (ComFlor analysis software, COFRA 5 and Kingspan Catalyst respectively), and EPD values were sourced from the corresponding manufacturer-published declarations. 
 
-\todo[inline]{Add specific EPD references for each manufacturer once collected. do i need to include all of them?}
-
 \subsubsection*{Material properties (\texttt{material\_prop})}
 The material property table contains design properties for concrete, timber, and steel: characteristic compressive strength $f_{ck}$, mean tensile strength $f_{ctm}$, mean elastic modulus $E_{cm}$, dry and wet unit weights, and (for reinforcement) characteristic yield strength $f_{sk}$, modulus $E_s$, cross-sectional area per metre $A_s$, and bar diameter $d_s$. For mesh reinforcement, standard fabric types A142, A193, A252, and A393 are listed (per BS~4483:2025). For timber, additional properties such as bending and shear strengths and burn rate are included.
 
@@ -516,7 +514,9 @@ where the position factor $z = 1/(1/\sqrt{u_1} + 1/\sqrt{u_2} + 1/\sqrt{u_3})$ a
 \subsubsection*{Vibration}
 \label{sec:vibration_method}
 
-Vibration serviceability is not incorporated as a structural constraint within the main optimisation. The full SCI~P354 method \citep{RefWorks:hicks2009p354}, which is the principal UK guidance for composite floor vibration, requires bay-level geometry inputs --- secondary beam span, primary beam span, bay width, and damping ratio --- none of which are defined in a slab-only optimisation study. Including a beam model would introduce multiple additional discrete variables (beam section, bay geometry) and fundamentally change the scope of the comparison, which is limited to the slab cross-section.
+Vibration serviceability is not incorporated as a structural constraint within the main optimisation. The Steel Construction Institute (SCI) publication 354 \citep{RefWorks:hicks2009p354} outlines the design guidance for all types of floor construction involving steel for determining the vibration response of sensitive floors. It is widely used in practice and allows the floor response to be compared with other UK documents such as BS 6472 and ISO 10137. The document was carried out as part of the ECSC project involving RWTH and Arcelor Profil Luxembourg Research.
+
+The full method outlined in section 7 of this publication requires bay-level geometry inputs --- secondary beam span, primary beam span, bay width, and damping ratio --- none of which are defined in a slab-only optimisation study. Including a beam model would introduce multiple additional discrete variables (beam section, bay geometry) and fundamentally change the scope of the comparison, which is limited to the slab cross-section.
  
 Instead, a slab-only screening check is performed as a post-processing step (implemented in \texttt{verify\_vibration.py}). The slab is modelled as a 1\,m-wide, simply-supported strip spanning the secondary-beam spacing $b$ on rigid supports, isolating the slab's own contribution to the floor frequency; this is the quantity reported by the ComFlor design tool, and it follows the SCI~P354 approach. The check proceeds in three steps.
  
@@ -550,18 +550,20 @@ This slab-only frequency is deliberately conservative as a screening check: the 
  
 At longer office spans, vibration is likely to govern the overall composite floor design once beams are also considered. The implications are discussed further in Section~\ref{sec:assumptions}.
 
-\todo[inline]{ Include a short paragraph on how commonly the full P354 method is used in practice and whether there is further guidance available (SCI P354 is the standard reference; include context from the vibration check results). Add full bay configuration example to appendix.}
+\todo[inline]{Add full bay configuration example to appendix.}
 
 \subsubsection*{Acoustic performance}
 \label{sec:acoustic}
 
 Acoustic performance is not incorporated as a structural constraint within the optimisation. Instead, the floor build-up for each occupancy scenario (Table~\ref{tab:floor_buildup}) is pre-selected to meet the applicable acoustic requirements, and its GWP contribution is added to $\mathrm{GWP}_\mathrm{total}$ as described in Section~\ref{sec:env_impact}.
 
-The two phenomena of concern are airborne sound transmission and impact sound transmission. In Switzerland, SIA~181 \citep{RefWorks:sia181} expresses its requirements using a standardised level difference $D_i$ for airborne sound and a standardised impact sound pressure level $L'_i$ for impact sound, set according to a classification of the sensitivity of the receiving space and the noise exposure.  In the United Kingdom, Approved Document~E \citep{RefWorks:adePartE} specifies field-measured requirements for separating floors
+The two phenomena of concern are airborne sound transmission and impact sound transmission. In Switzerland, SIA~181 \citep{RefWorks:sia181} expresses its requirements using a standardised level difference $D_i$ for airborne sound and a standardised impact sound pressure level $L'_i$ for impact sound, set according to a classification of the sensitivity of the receiving space and the noise exposure.  In the United Kingdom, Approved Document~E \citep{RefWorks:adePartE} specifies field-measured requirements for separating floors for the standardised weighted sound level difference including a spectrum adaptation term ($D_{nT,w}+C_\mathrm{tr}$) and standrdised weighted impact sound preseure ($L'_{nT,w}$) levels. The requirements for each use case are given in Table~.
 
-\todo[inline]{Confirm the precise SIA~181 and UK numeric requirements ($D_i$ and $L'_i$) for each use case; the values are classification-dependent; add table too of the requirements}
+\todo[inline]{Add table of the requirements from word document 'acoustic checks'}
 
-\todo[inline]{Add reference to SCI P321 and 322 for acoustic performance of each use case build-up; add indicative airborne ($D_{nT,w}+C_\mathrm{tr}$ / $D_i$) and impact ($L'_{nT,w}$ / $L'_i$) values.}
+\todo[inline]{Explain method for making the floor build ups.}
+
+The acoustic performance of each floor build up was estimated using the SCI publications 321 \citep{RefWorks:RefID:acousticslimdek} and 322 \citep{RefWorks:acousticcomposite}.
 
 For the \textbf{office} scenario, the build-up consists of a raised access floor system comprising a chipboard panel (18\,mm), gypsum fibreboard (19\,mm), and rock wool insulation (30\,mm). Raised access floors are widely used in commercial office fit-out to route mechanical and electrical services and are compatible with composite slab construction without structural modifications.
 
@@ -632,39 +634,7 @@ The RC rectangular slab, RC ribbed slab, and timber cross-sections are optimised
 %===============================================================
 To verify the correct implementation of the design procedures, the structural model was compared against published manufacturer design tables for representative deck products and span configurations. Manufacturer design tables are derived from structural test results and detailed calculations and therefore provide an independent reference against which the implementation can be assessed.
 
-For each validation case, the model-computed maximum permissible span at a given slab depth was compared against the corresponding manufacturer-tabulated value for the same loading and fire rating. Validation was performed across the following deck families: ComFlor~225 and ComFlor~51/60/80 (Tata Steel, EC~4 design tables), ComFlor~210 (Tata Steel, BS~5950 design tables), and Multideck~60/80/146 (Kingspan, BS~5950 design tables). Table~\ref{tab:validation_summary} summarises the results by deck family and span.
-
-\begin{table}[h!]
-\small
-\centering
-\caption{Validation summary: number of passing and failing configurations by deck family. PASS: computed maximum span within manufacturer-stated range; FAIL: computed span exceeds manufacturer limit (non-conservative); N/A: manufacturer table does not cover the propped/gauge combination.}
-\label{tab:validation_summary}
-\begin{tabular}{lcccc}
-\toprule
-Deck family & Code & n PASS & n FAIL & n N/A \\
-\midrule
-ComFlor 225 & EC  & 23 & 2  & 0 \\
-ComFlor 51  & EC  & 41 & 3  & 0 \\
-ComFlor 60  & EC  & 30 & 25 & 0 \\
-ComFlor 80  & EC  & 23 & 20 & 0 \\
-ComFlor 210 & BS  & 17 & 6  & 0 \\
-Multideck 60  & BS & 31 & 0  & 0 \\
-Multideck 80  & BS & 27 & 0  & 0 \\
-Multideck 146 & BS & 15 & 0  & 37 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Deep deck profiles (ComFlor~225, Multideck~60/80/146, ComFlor~210) show consistently good agreement with manufacturer tables: the computed permissible spans are within the tabulated range for the large majority of configurations, with the few failures concentrated at longer spans where the manufacturer table ends and the model applies the standard Eurocode equations beyond the tabulated range.
-
-The shallow deck families ComFlor~60 and ComFlor~80 exhibit a higher failure rate, with approximately half of all tested configurations failing. Inspection shows that the failures are concentrated at longer spans ($L \ge 4$\,m for ComFlor~60, $L \ge 5$\,m for ComFlor~80) where the model computes a permissible span that slightly exceeds the manufacturer's stated limit (Span/Limit $>$ 1). The principal sources of this overprediction are: (i) the fallback assumption $A_{p,e} = 0.9\,A_p$ for shallow profiles, which does not reflect the test-derived effective area used in the manufacturer software; and (ii) the use of Eurocode~4 design equations rather than the UK National Annex or empirically-adjusted design tables supplied with the ComFlor software, which incorporate additional conservative calibration factors.
-
-\todo[inline]{Add Figure: scatter plot of computed maximum span vs manufacturer-tabulated maximum span. 1:1 line, $\pm$10\% envelope, points coloured by deck family. Annotate the ComFlor 60/80 cluster above the 1:1 line.}
-
-\todo[inline]{check the comflor and kingspan tables in the code, rerun and update results and rewrite this section}
-The Multideck N/A cases correspond to propped configurations for which the Kingspan Catalyst software uses BS~5950 design tables that are not reproduced in the technical manual; no independent reference value is available for these cases. The ComFlor~46 deck is similarly N/A for all configurations due to the absence of published design table data at the span range evaluated.
-
-Overall, the validation gives confidence that the structural checks are correctly implemented for deep deck profiles and for the shallow ComFlor~225/51 family. The conservative bias for ComFlor~60/80 at longer spans means these profiles are treated conservatively within the optimisation, which is an acceptable outcome for the purposes of a comparative GWP study.
+For each validation case, the model-computed maximum permissible span at a given slab depth was compared against the corresponding manufacturer-tabulated value for the same loading and fire rating. Validation was performed across the following deck families: ComFlor~225 and ComFlor~51/60/80 (Tata Steel, EC~4 design tables), ComFlor~210 (Tata Steel, BS~5950 design tables), and Multideck~60/80/146 (Kingspan, BS~5950 design tables). 
 
 %===============================================================
 \subsection{Assumptions and limitations}
@@ -691,12 +661,6 @@ For multi-span configurations, the steel deck is assumed to be continuous (lappe
 \paragraph{Local resistance checks (construction stage) not implemented.}
 Local resistance checks at supports per EN~1993-1-3 Cl.\,6.1.7 (web crippling and combined bending plus support reaction) are not currently implemented. These checks are not expected to control for the span and load ranges considered.
 
-\subsubsection*{Connection assumptions}
-
-\paragraph{Shear connectors not considered.}
-End anchorage by welded headed shear studs (per 4-1-1/9.7.4) is not credited in the longitudinal shear resistance, consistent with manufacturer design tables. Comparative analysis (script \texttt{end\_anchorage\_comparison.py}) indicates that the resulting moment capacity increase ranges from approximately \textbf{[INSERT X]}\% to \textbf{[INSERT Y]}\% across the deck range. Including shear studs would also introduce an additional GWP penalty that is not quantified here.
-\todo[inline]{Delete this as they are included in code just never needed so not selected - add to design procedure above too.}
-
 \subsubsection*{Material and EPD assumptions}
 
 \paragraph{Concrete grade range C25/30 to C30/37.}
@@ -704,5 +668,5 @@ Only normal-weight concrete grades C25/30 and C30/37 are considered, as increase
 \todo[inline]{add reference to section later on which discusses effect of running with C20 as it seems to work structurally even if its not industry practice}
 
 \paragraph{Granularity of deck EPDs.}
-Tata Steel publish individual EPDs for each ComFlor profile and gauge combination. Kingspan publish a single EPD per tonne of steel for the entire Multideck range. ArcelorMittal Cofraplus and Cofrastra products are included in the database but are excluded from the main optimisation runs: ArcelorMittal publish a single EPD covering all deck profiles regardless of depth or gauge, which does not reflect the substantially different steel quantities per unit area between shallow and deep profiles. After comparing individual manufacturer EPDs with the KBOB reference database, it was determined that the ArcelorMittal single-EPD approach would underrepresent the GWP of deep decking and overrepresent that of shallow decking, introducing a systematic bias that would distort the comparative results. Tata Steel and Kingspan products are therefore retained as the primary optimisation dataset.
-\todo[inline]{Expand this paragraph with specific numbers comparing ArcelorMittal EPD vs KBOB values and vs Tata Steel/Kingspan profile-specific data.}
+Tata Steel publish individual EPDs for each ComFlor profile and gauge combination. Kingspan publish a single EPD per tonne of steel for the entire Multideck range. ArcelorMittal Cofraplus and Cofrastra products are included in the database but are excluded from the main optimisation runs: ArcelorMittal publish a single EPD covering all deck profiles regardless of depth or gauge, which does not reflect the substantially different steel quantities per unit area between shallow and deep profiles. After comparing individual manufacturer EPDs with the KBOB reference database, it was determined that the ArcelorMittal single-EPD approach would severely underrepresent the GWP of all decking profiles, introducing a systematic bias that would distort the comparative results. Tata Steel and Kingspan products are therefore retained as the primary optimisation dataset. The KBOB GWP value for coated flat steel is 3.64 kg co2eq/kg steel, ComFlor's EPDs provide a GWP of between 2.83 and 3.09, Mutlideck has a value of 2.50 while Arcelor Mittal's EPD has a range of between 0.93 and 2.11.
+\todo[inline]{Rewrite this paragraph better.}

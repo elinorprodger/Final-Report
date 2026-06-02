@@ -1,13 +1,11 @@
 \section{Results}
 \label{fourthchapter}
 
-%===============================================================
-\subsection{Introduction}
-%===============================================================
+This chapter presents the results of the GWP optimisation described in Chapter~\ref{thirdchapter}. Results are organised as follows. Section~\ref{sec:res_validation} summarises the validation of the structural model against manufacturer design tables. 
 
-This chapter presents the results of the GWP optimisation described in Chapter~\ref{thirdchapter}. Results are organised as follows. Section~\ref{sec:res_validation} summarises the validation of the structural model against manufacturer design tables. Section~\ref{sec:res_optimal_gwp} presents the minimum-GWP composite slab cross-sections for the office occupancy scenario across all three span configurations, with comparisons against the reinforced concrete baselines from the pre-existing framework. Section~\ref{sec:res_govcheck} identifies which limit state governs the design across the span and product space. Section~\ref{sec:res_gwp_breakdown} decomposes the total GWP into its material contributions. Section~\ref{sec:res_optimal_sections} reports the optimal deck selection as a function of span.
+\todo[inline]{add summary of structure of the section}
 
-\todo[inline]{Once retail and industrial scenarios are run, add corresponding subsections and a cross-scenario comparison section. Residential results can follow if time permits before submission.}
+\todo[inline]{add corresponding subsections and a cross-scenario comparison section for other loading cases}
 
 %===============================================================
 \subsection{Structural model validation}
@@ -16,7 +14,7 @@ This chapter presents the results of the GWP optimisation described in Chapter~\
 
 The structural model was validated against manufacturer design tables as described in Section~\ref{sec:validation}. Across all tested configurations, the model correctly predicted passing and failing conditions for deep deck profiles (ComFlor~225, Multideck~60/80/146) and for the ComFlor~51 family, with most computed spans within the manufacturer-tabulated range. The shallow-deck families ComFlor~60 and ComFlor~80 showed a systematic overprediction of permissible span at the longer span range, attributable primarily to the conservative $A_{p,e}$ fallback assumption and differences between Eurocode~4 equations and the empirically-calibrated UK design tables used by the ComFlor software.
 
-\todo[inline]{Insert final validation scatter plot here once runs are complete (see Chapter~3, Section~\ref{sec:validation}). Summarise: X of Y non-N/A configurations match within tolerance; note the systematic bias for ComFlor 60/80 at spans $\ge$ 4--5\,m and its attribution.}
+\todo[inline]{Add results, tabulated and graph. Insert final validation scatter plot here once runs are complete (see Chapter~3, Section~\ref{sec:validation}). Summarise: X of Y non-N/A configurations match within tolerance; note the systematic bias for ComFlor 60/80 at spans $\ge$ 4--5\,m and its attribution.}
 
 The validation gives confidence that the structural checks are implemented correctly for the deck families that dominate the optimisation results (deep profiles and ComFlor~225), and that the conservative bias for ComFlor~60/80 does not affect the qualitative rankings between slab systems.
 
@@ -180,16 +178,6 @@ Concrete grade C25/30 is preferred over C30/37 in all observed optimal solutions
 
 \todo[inline]{Discuss: the propped/unpropped status of the optimal solution as a function of span. Quantify the GWP penalty of forcing propped construction at short spans (where unpropped is feasible) and the benefit of propped construction at long spans (where it reduces the required section depth to meet SLS deflection). Note that the model does not include any GWP or cost penalty for the temporary props themselves.}
 
-%===============================================================
-\subsection{Sensitivity and robustness}
-\label{sec:res_sensitivity}
-%===============================================================
-
-\todo[inline]{This section is a placeholder. Once all scenarios are complete, consider the following sensitivity analyses:}
-
-\begin{itemize}
-    \item \textbf{C20/25 concrete.} \todo[inline]{If time permits: run office single-span with C20/25 to assess impact of lower-strength concrete on feasibility and GWP. This aligns with the ``compare C20 concrete strength as alternative to industry practice'' item in the checklist.}
-\end{itemize}
 
 %===============================================================
 \subsection{Summary}
