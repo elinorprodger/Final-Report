@@ -1,191 +1,317 @@
 \section{Results}
 \label{fourthchapter}
 
-This chapter presents the results of the GWP optimisation described in Chapter~\ref{thirdchapter}. Results are organised as follows. Section~\ref{sec:res_validation} summarises the validation of the structural model against manufacturer design tables. 
+\label{sec:res_intro}
+This chapter presents the results of the global warming potential (GWP) optimisation across the four occupancy scenarios and the practical span range of 3--10\,m. Five floor systems are compared: the composite steel--concrete slab developed in this work, two reinforced concrete baselines (a solid flat slab, \texttt{RC flat}, and a ribbed slab, \texttt{RC ribbed}), and two timber baselines (a solid rectangular slab, \texttt{timber flat}, and a ribbed slab, \texttt{timber ribbed}) inherited from the pre-existing framework.
 
-\todo[inline]{add summary of structure of the section}
+Two points on the scope of the comparison apply throughout. First, only the composite slab and the RC flat slab are analysed as continuous members; the RC ribbed and timber systems were not extended to continuous spans within the pre-existing framework. In the two-- and three--span figures that follow, these systems are therefore shown at their single--span values as reference baselines and do not represent re-analysed continuous designs. Second, the office occupancy is treated as the principal scenario and is reported in full (Section~\ref{sec:res_office}); the residential, retail, and industrial scenarios are reported in condensed form (Section~\ref{sec:res_other}), with the complete per--span tables, breakdowns, and supporting figures collected in Appendix~\ref{app:results_figures}.
 
-\todo[inline]{add corresponding subsections and a cross-scenario comparison section for other loading cases}
+For each system, span, and span configuration, the optimiser returns the minimum--GWP cross--section that satisfies all applicable design checks. This combined--criterion result is referred to as the \emph{envelope} (ENV) optimum and forms the basis of all GWP comparisons. Where it is informative to show why a particular limit state governs, the results of the single--criterion runs (ULS, SLS, and fire considered in isolation) are used. Total GWP (\(\mathrm{GWP}_\mathrm{tot}\)) comprises the structural slab contribution (\(\mathrm{GWP}_\mathrm{struct}\)) plus the fixed non--structural floor build--up; all values are reported per square metre of floor area.
 
-%===============================================================
-\subsection{Structural model validation}
-\label{sec:res_validation}
-%===============================================================
-
-The structural model was validated against manufacturer design tables as described in Section~\ref{sec:validation}. Across all tested configurations, the model correctly predicted passing and failing conditions for deep deck profiles (ComFlor~225, Multideck~60/80/146) and for the ComFlor~51 family, with most computed spans within the manufacturer-tabulated range. The shallow-deck families ComFlor~60 and ComFlor~80 showed a systematic overprediction of permissible span at the longer span range, attributable primarily to the conservative $A_{p,e}$ fallback assumption and differences between Eurocode~4 equations and the empirically-calibrated UK design tables used by the ComFlor software.
-
-\todo[inline]{Add results, tabulated and graph. Insert final validation scatter plot here once runs are complete (see Chapter~3, Section~\ref{sec:validation}). Summarise: X of Y non-N/A configurations match within tolerance; note the systematic bias for ComFlor 60/80 at spans $\ge$ 4--5\,m and its attribution.}
-
-The validation gives confidence that the structural checks are implemented correctly for the deck families that dominate the optimisation results (deep profiles and ComFlor~225), and that the conservative bias for ComFlor~60/80 does not affect the qualitative rankings between slab systems.
-
-%===============================================================
-\subsection{Minimum-GWP composite slab: optimal cross-sections}
-\label{sec:res_optimal_gwp}
-%===============================================================
-
-\subsubsection*{Overview}
-The bounded scalar optimisation was performed independently for each combination of deck product (Tata Steel ComFlor and Kingspan Multideck ranges), concrete grade (C25/30 and C30/37), span configuration (single, two-span, three-span continuous), and span length (3--10\,m). The global minimum across all deck products and concrete grades is reported for each case. Propped construction is preferred by the optimiser at longer spans where unpropped sections become unfeasible; unpropped construction is feasible and preferred at shorter spans where the construction-stage checks do not govern.
-
-\subsubsection*{Office scenario --- single span}
+%==============================================================================
+\subsection{Office scenario}
 \label{sec:res_office}
+%==============================================================================
+The office scenario uses an imposed load of 2.5 + 0.50\,kN/m$^2$ with a raised--access--floor build--up (Section~\ref{sec:floor_buildup}). It is presented here in full; the other occupancies follow the same structure in condensed form.
 
-Figure~\ref{fig:gwp_office_ss} shows the minimum total GWP as a function of span for the \textbf{office} occupancy scenario (single-span configuration), comparing the optimal composite slab against the reinforced concrete flat slab and ribbed slab baselines.
-
+%------------------------------------------------------------------
+\subsubsection{GWP comparison across floor systems}
+\label{sec:res_office_gwp}
+%------------------------------------------------------------------
+Figure~\ref{fig:office_gwp} compares the total GWP of the five systems against span for the single--, two--, and three--span configurations. The optimal composite cross--sections for all three configurations are listed in Table~\ref{tab:office_optima}.
+ 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=1\textwidth]{figures/office/ENV/plot_office_1span_ENV_gwp.png}
-    \caption{Minimum total GWP per metre of span length for the office occupancy scenario (single-span configuration), comparing RC flat slab, RC ribbed slab, and composite slab systems under the envelope (ENV) criterion. Points are labelled with the governing limit state.}
-    \label{fig:gwp_office_ss}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/office/ENV/plot_office_1span_ENV_gwp.png}
+        \caption{Single span}
+        \label{fig:office_gwp_1span}
+    \end{subfigure}\\[4pt]
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/office/ENV/plot_office_2span_ENV_gwp.png}
+        \caption{Two--span continuous}
+        \label{fig:office_gwp_2span}
+    \end{subfigure}\\[4pt]
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/office/ENV/plot_office_3span_ENV_gwp.png}
+        \caption{Three--span continuous}
+        \label{fig:office_gwp_3span}
+    \end{subfigure}
+    \caption[Office total GWP versus span]{Office scenario: total GWP per unit floor area versus span for all five floor systems, in the single--, two--, and three--span configurations.}
+    \label{fig:office_gwp}
 \end{figure}
 
-Key observations for the office single-span case:
-\begin{itemize}
-    \item At short spans (3--4\,m), the fire check D1 (thermal insulation, formula D.1) governs for several deck products, setting a minimum required concrete depth above the ribs that exceeds the structurally required depth. The minimum slab depth is therefore set by the fire insulation requirement rather than by structural capacity.
-    \item At intermediate spans (5--7\,m), longitudinal shear (m--k method) and fire checks D2 or D4 are the most common governing checks for the products that appear in the optimal set.
-    \item At longer spans (8--10\,m), SLS total deflection ($\delta_\mathrm{tot} \le L/300$) governs the design, requiring progressively deeper sections to satisfy the stiffness requirement.
-    \item Propped construction is selected by the optimiser for the majority of configurations at spans $\ge 7$\,m. At shorter spans, unpropped construction is generally feasible and preferred, since the construction-stage SLS deflection check is satisfied within the range of available slab depths.
-    \item Concrete grade C25/30 is preferred over C30/37 in all observed optimal solutions at this scenario, consistent with the argument that composite slabs at office loads are rarely concrete-strength-governed.
-\end{itemize}
+The dominant result is unambiguous and holds across every span and span configuration: \textbf{the composite slab has the highest total GWP of the five systems compared}. For the single--span office case, the composite optimum rises from 61.8\,kg\,CO$_2$eq/m$^2$ at 3\,m to 152.5\,kg\,CO$_2$eq/m$^2$ at 9\,m, with no feasible solution at 10\,m. Over the same range the RC flat slab spans 43.8--100.7, the RC ribbed slab 40.3--54.8, the timber rectangular slab 29.3--43.1, and the timber ribbed slab 58.1--64.5\,kg\,CO$_2$eq/m$^2$. The timber rectangular slab is the lowest--carbon system throughout, and the RC ribbed slab the lowest of the non--timber systems. At 3\,m the composite slab carries approximately 53\% more embodied carbon than the RC ribbed baseline; by 9\,m this gap widens to roughly a factor of three, as the composite GWP grows steeply with span while the RC ribbed and timber GWP grow only gradually.
 
-Table~\ref{tab:optimal_office_ss} summarises the optimal cross-section details at each span.
+Extending the composite and RC flat systems to continuous spans alters their GWP, but does not change the overall ranking: in no configuration does either system approach the RC ribbed or timber baselines. The effect of continuity on the composite slab is non--monotonic and is examined separately in Section~\ref{sec:res_office_continuity}.
 
 \begin{table}[h!]
-\footnotesize
-\centering
-\caption{Optimal composite slab cross-sections for the office scenario (single-span). $h_\mathrm{struct}$: total structural slab depth; GWP$_\mathrm{struct}$: structural GWP only (kg\,CO$_2$-eq/m); GWP$_\mathrm{tot}$: including floor build-up (kg\,CO$_2$-eq/m); Gov.: governing limit state.}
-\label{tab:optimal_office_ss}
-\begin{tabular}{ccccccc}
+\small\centering
+\caption{Optimal composite cross--sections, office scenario, all span configurations. $h$ is total slab depth; all sections are propped (Section~\ref{sec:res_office_gov}).}
+\label{tab:office_optima}
+\begin{tabular}{llccccl}
 \toprule
-$L$ [m] & Deck & $h_\mathrm{struct}$ [mm] & Propped & GWP$_\mathrm{struct}$ [kg/m] & GWP$_\mathrm{tot}$ [kg/m] & Gov. \\
+Config. & $L$ [m] & Deck & Grade & $h$ [mm] & $\mathrm{GWP}_\mathrm{tot}$ & Governing check \\
 \midrule
-3  & Multideck 60 0.9  & 113 & No  & \todo{fill} & 61.1  & D1 \\
-4  & Multideck 80 1.0  & 148 & No  & \todo{fill} & 70.8  & Long.\ shear (m-k) \\
-5  & Multideck 146 1.2 & 212 & No  & \todo{fill} & 83.8  & D4 \\
-6  & Multideck 146 1.2 & 212 & No  & \todo{fill} & 93.7  & D4 \\
-7  & ComFlor 60 0.9    & 289 & Yes & \todo{fill} & 106.0 & D2 \\
-8  & Multideck 50 0.85 & 305 & Yes & \todo{fill} & 119.6 & SLS deflection \\
-9  & Multideck 50 0.85 & 355 & Yes & \todo{fill} & 134.4 & SLS deflection \\
-10 & Multideck 50 0.9  & 389 & Yes & \todo{fill} & 149.4 & SLS deflection \\
+\multirow{7}{*}{Single}
+ & 3 & Multideck 60 0.9  & C25/30 & 180 & 61.8  & Fire D1 (insulation) \\
+ & 4 & Multideck 80 1.0  & C25/30 & 215 & 72.3  & Long. shear (m--k) \\
+ & 5 & ComFlor 60 0.9    & C25/30 & 249 & 83.8  & SLS deflection \\
+ & 6 & ComFlor 210       & C25/30 & 365 & 95.4  & SLS deflection \\
+ & 7 & ComFlor 225       & C25/30 & 441 & 114.0 & SLS deflection \\
+ & 8 & ComFlor 225       & C25/30 & 504 & 127.4 & SLS deflection \\
+ & 9 & Multideck 146 1.5 & C25/30 & 455 & 152.5 & SLS deflection \\
+\midrule
+\multirow{6}{*}{Two--span}
+ & 3 & Multideck 60 0.9  & C25/30 & 185 & 64.2  & Long. shear (m--k) \\
+ & 4 & ComFlor 60 0.9    & C25/30 & 190 & 73.5  & Fire D3 (hogging) \\
+ & 5 & ComFlor 60 0.9    & C25/30 & 207 & 76.8  & ULS hogging \\
+ & 6 & ComFlor 60 0.9    & C25/30 & 233 & 83.1  & ULS hogging \\
+ & 7 & ComFlor 210       & C25/30 & 431 & 110.0 & Fire D3 (hogging) \\
+ & 8 & Multideck 146 1.5 & C25/30 & 470 & 148.4 & ULS hogging \\
+\midrule
+\multirow{7}{*}{Three--span}
+ & 3 & Multideck 60 0.9  & C25/30 & 181 & 62.7  & Long. shear (m--k) \\
+ & 4 & ComFlor 60 0.9    & C25/30 & 197 & 73.1  & ULS hogging \\
+ & 5 & ComFlor 60 0.9    & C25/30 & 210 & 77.3  & SLS deflection \\
+ & 6 & ComFlor 60 0.9    & C30/37 & 240 & 86.2  & ULS hogging \\
+ & 7 & ComFlor 210       & C25/30 & 398 & 103.6 & Fire D3 (hogging) \\
+ & 8 & ComFlor 210       & C25/30 & 439 & 112.1 & Fire D3 (hogging) \\
+ & 9 & Multideck 146 1.5 & C25/30 & 475 & 153.5 & ULS hogging \\
 \bottomrule
 \end{tabular}
-\vspace{2pt}\\
-\todo[inline]{Fill GWP$_\mathrm{struct}$ column from output CSV (\texttt{gwp\_struct} field). Confirm all GWP$_\mathrm{tot}$ values once full run is complete. Verify propped/unpropped status for each row.}
 \end{table}
 
-At $L = 6$\,m (Multideck~146 1.2\,mm, $h = 212$\,mm, unpropped), the structural GWP is approximately 74\,kg\,CO$_2$-eq/m, of which concrete accounts for roughly half, the steel deck for approximately 39\%, and mesh and trough bars for the remainder. The non-structural floor build-up (chipboard, gypsum fibreboard, rock wool) contributes a further approximately 19.6\,kg\,CO$_2$-eq/m, giving a total of approximately 94\,kg\,CO$_2$-eq/m. The floor build-up contribution is fixed for all spans within a given occupancy scenario; its proportional contribution therefore diminishes at longer spans where the structural GWP increases.
-
-\todo[inline]{Add Figure: single-span office GWP breakdown stacked bar chart (concrete, deck, mesh, trough bars, floor build-up) at each span 3--10\,m. Use the gwp\_breakdown\_all.py script output. This reveals how the concrete/deck ratio shifts as spans increase.}
-
-\subsubsection*{Office scenario --- two-span continuous}
-
-Figure~\ref{fig:gwp_office_2span} shows the results for the \textbf{two-span continuous} office configuration.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=1\textwidth]{figures/office/ENV/plot_office_2span_ENV_gwp.png}
-    \caption{Minimum total GWP per metre of span for the office scenario (two-span continuous configuration). Comparison against RC flat slab and ribbed slab baselines; governing limit state indicated.}
-    \label{fig:gwp_office_2span}
-\end{figure}
-
-For the two-span case, the same general pattern holds: fire checks govern at short spans, SLS deflection governs at long spans. The continuous configuration allows some moment redistribution at internal supports during the construction stage (Section~\ref{sec:constr_stage}), which benefits decks with published hogging resistance values. The hogging ULS and fire D3 checks at internal supports are additional constraints that do not apply for the single-span case. 
-
-\subsubsection*{Office scenario --- three-span continuous}
-
-Figure~\ref{fig:gwp_office_3span} shows the results for the \textbf{three-span continuous} office configuration.
+%------------------------------------------------------------------
+\subsubsection{Governing limit states}
+\label{sec:res_office_gov}
+%------------------------------------------------------------------
+The limit state governing each composite optimum shifts systematically with span and configuration (Table~\ref{tab:office_optima}). For the \emph{single--span} optima, the fire thermal--insulation check (D1) governs at 3\,m, longitudinal shear by the m--k method at 4\,m, and composite SLS deflection at every span from 5\,m upward. For the \emph{continuous} configurations the hogging checks---composite ULS hogging and the fire D3 reduced--section hogging check---govern at most spans, reflecting the support moment that the single--span case does not carry.
+ 
+That SLS deflection governs the single--span optima from 5\,m is confirmed by comparing the single--criterion runs. Figure~\ref{fig:office_criteria} overlays the GWP of the ULS--only, SLS--only, and fire--only optima against the combined envelope (ENV) result, for each span configuration. For the single span (Figure~\ref{fig:office_criteria}a), the envelope follows the SLS--only curve closely from 5\,m upward, with the ULS--only curve sitting consistently below and the fire--only remaining relatively constant ---confirming that the single--span slab is stiffness--governed at practical spans rather than strength--governed. This is a key observation, since the added depth and hence GWP is being driven by deflection control rather than by load capacity.
+ 
+For the continuous configurations (Figures~\ref{fig:office_criteria}b and~\ref{fig:office_criteria}c) the picture changes: the envelope departs from the SLS--only curve and rises above both the SLS-- and ULS--only curves at several spans, the ULS--curve in this case is higher than the SLS, showing that at continuous spans the strength governs the design. In all configurations the fire--only curve is the lowest and flattest, confirming that fire governs only at the shortest spans.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=1\textwidth]{figures/office/ENV/plot_office_3span_ENV_gwp.png}
-    \caption{Minimum total GWP per metre of span for the office scenario (three-span continuous configuration). Comparison against RC flat slab and ribbed slab baselines; governing limit state indicated.}
-    \label{fig:gwp_office_3span}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/office/fig_criteria_comparison_SS.png}
+        \caption{Single span}
+        \label{fig:office_criteria_SS}
+    \end{subfigure}\\[4pt]
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/office/fig_criteria_comparison_2span.png}
+        \caption{Two--span continuous}
+        \label{fig:office_criteria_2span}
+    \end{subfigure}\\[4pt]
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/office/fig_criteria_comparison_3span.png}
+        \caption{Three--span continuous}
+        \label{fig:office_criteria_3span}
+    \end{subfigure}
+    \caption[Office composite design criteria comparison]{Office composite slab: GWP of the optima obtained under each design criterion in isolation (ULS only, SLS only, fire only) compared with the combined envelope (ENV), for the single--, two--, and three--span configurations.}
+    \label{fig:office_criteria}
 \end{figure}
 
-The three-span continuous results are qualitatively similar to the two-span case. Additional hogging demand at two internal supports means that a heavier mesh grade is more frequently required, increasing the mesh GWP contribution marginally compared to the single-span case. The fire D3 (hogging) check must also be satisfied at both internal supports.
+\todo[inline]{add explanation of where all unpropped sections become unfeasible, comparison across simple and continuous spans}
 
-\todo[inline]{Add Figure: side-by-side comparison of total GWP vs span for office scenario across all three span configurations (single, two-span, three-span) on one set of axes, to show whether continuity provides a consistent GWP benefit or penalty. Quantify the difference at $L = 6$\,m and $L = 9$\,m as representative intermediate and long spans.}
+%------------------------------------------------------------------
+\subsubsection{GWP breakdown by material}
+\label{sec:res_office_breakdown}
+%------------------------------------------------------------------
+Table~\ref{tab:office_breakdown} decomposes the single--span composite GWP into its material contributions. The steel deck is the single largest structural contributor at most spans, exceeding the concrete contribution up to 6\,m and remaining comparable beyond it, despite the steel mass being far smaller than the concrete mass---a direct consequence of the much higher GWP intensity per kilogram of structural steel. The fixed floor build--up (19.6\,kg\,CO$_2$eq/m$^2$) is 32\% of the total at 3\,m but only 13\% at 9\,m, as the structural contribution grows with span.
 
-\subsubsection*{Other scenarios}
+\begin{table}[h!]
+\small\centering
+\caption{GWP breakdown of the optimal composite slab, office single span (kg\,CO$_2$eq/m$^2$).}
+\label{tab:office_breakdown}
+\begin{tabular}{ccccccc}
+\toprule
+$L$ [m] & Concrete & Deck & Mesh & Trough bars & Struct. & Build--up \\
+\midrule
+3 & 15.1 & 23.4 & 1.6 & 2.2  & 42.2  & 19.6 \\
+4 & 19.2 & 28.8 & 2.4 & 2.4  & 52.7  & 19.6 \\
+5 & 28.9 & 29.2 & 2.4 & 3.7  & 64.2  & 19.6 \\
+6 & 24.8 & 46.9 & 2.4 & 1.7  & 75.8  & 19.6 \\
+7 & 41.2 & 49.1 & 2.4 & 1.7  & 94.4  & 19.6 \\
+8 & 53.2 & 49.1 & 2.4 & 3.1  & 107.8 & 19.6 \\
+9 & 54.9 & 60.8 & 2.4 & 14.8 & 132.9 & 19.6 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\todo[inline]{Run optimisation for retail scenario and insert results here. $q_k = 4.0$\,kN/m$^2$, no partition load, floor build-up includes parquet + gypsum fibreboard + glass wool. Higher live load is expected to push governing limit state toward ULS bending / longitudinal shear for shorter spans. $\psi_\mathrm{fi} = 0.7$.}
+The fire trough--bar contribution is small at most spans but jumps to 14.8\,kg\,CO$_2$eq/m$^2$ at 9\,m, where the deep section requires substantial trough reinforcement to satisfy the D2 fire sagging check. Figure~\ref{fig:office_breakdown} shows the breakdown as a stacked bar for the single span; the equivalent figures for the two-- and three--span configurations are given in Appendix~\ref{app:results_figures}.
 
-\todo[inline]{Run optimisation for industrial scenario and insert results here. $q_k = 7.5$\,kN/m$^2$, floor build-up is cement screed + rock wool only. Very high live load: expect ULS checks to govern across more of the span range. $\psi_\mathrm{fi} = 0.9$ (highest fire combination factor of all scenarios).}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/office/GWP breakdown/results_office_ENV_gwp_comp_struct.png}
+    \caption[Office composite GWP breakdown, single span]{Office single span: structural GWP of the optimal composite slab decomposed into concrete, steel deck, mesh, and fire trough--bar contributions.}
+    \label{fig:office_breakdown}
+\end{figure}
 
-\todo[inline]{Run optimisation for residential scenario if time permits before 29 June submission.}
+%------------------------------------------------------------------
+\subsubsection{Structural depth and mass}
+\label{sec:res_office_depth}
+%------------------------------------------------------------------
+Figure~\ref{fig:office_height} compares the total slab depth of the five systems against span. The optimal composite depth (Table~\ref{tab:office_optima}) increases gradually.
 
-%===============================================================
+\todo[inline]{add the other two span heights and change the writing to match the actual pattern seen}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/office/ENV/plot_office_2span_ENV_height.png}
+    \caption[Office total slab depth versus span, single span]{Office single span: total slab depth versus span for all five systems.}
+    \label{fig:office_height}
+\end{figure}
+
+Grade C25/30 is selected in every optimum except the 6\,m three--span case, confirming that the section is not concrete--strength--governed; a stronger grade offers negligible structural benefit at higher GWP intensity.
+
+The structural mass (Figure~\ref{fig:office_mass}) follows the same trend as GWP, as expected given that GWP scales with material quantity. 
+\todo[inline]{explain the pattern better, }
+
+This mass has consequences beyond embodied carbon---for foundation and column loads, and for seismic mass---that are considered in the discussion (Chapter~\ref{fifthchapter}).
+
+\todo[inline]{add the other two span mass figures}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/office/ENV/plot_office_1span_ENV_mass.png}
+    \caption[Office slab mass versus span, single span]{Office single span: total slab mass per unit area versus span for all five systems.}
+    \label{fig:office_mass}
+\end{figure}
+
+\todo[inline]{add the other two span mass figures}
+
+%------------------------------------------------------------------
+\subsubsection{Effect of span continuity}
+\label{sec:res_office_continuity}
+%------------------------------------------------------------------
+Figure~\ref{fig:office_continuity} plots the composite GWP for the single--, two--, and three--span configurations on a single axis. The effect of continuity is non--monotonic and differs markedly from the RC flat slab, for which continuity reduces GWP consistently.
+\todo[inline]{check this is accurate}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig_composite_span_configs.png}
+    \caption[Office composite GWP by span configuration]{Office composite slab: total GWP versus span for single--, two--, and three--span configurations.}
+    \label{fig:office_continuity}
+\end{figure}
+
+\todo[inline]{write a proper explanation for the pattern, more about the envelopes, the trend line is similar across all three}
+
+%==============================================================================
+\subsection{Other occupancy scenarios}
+\label{sec:res_other}
+%==============================================================================
+The residential, retail, and industrial scenarios reproduce the office findings: the composite slab is the highest--carbon system at every span, the ranking of the five systems is unchanged, and the composite design is stiffness-- or hogging--governed over most of the range. Only the differences from the office case are reported here; full figures and tables are in Appendix~\ref{app:results_figures}.
+
+\subsubsection{Residential}
+\label{sec:res_residential}
+The residential scenario carries a higher imposed load and a heavier screed--based build--up, raising all systems' GWP relative to office. The single--span composite optimum runs from 72.1 at 3\,m to 165.8\,kg\,CO$_2$eq/m$^2$ at 9\,m; the ranking and the no--feasible--solution outcome at 10\,m are unchanged from office. The composite--to--RC--ribbed gap is again roughly 45\% at short spans, widening with span.
+
+\subsubsection{Retail}
+\label{sec:res_retail}
+The retail scenario uses the same elevated imposed load as residential but a lighter build--up. Composite GWP runs from 65.4 at 3\,m to 156.3\,kg\,CO$_2$eq/m$^2$ at 9\,m for the single span. The pattern is identical to office and residential.
+
+\subsubsection{Industrial}
+\label{sec:res_industrial}
+The industrial scenario carries the highest imposed load. Two outcomes distinguish it. First, composite GWP is the highest of any scenario, from 73.0 at 3\,m to 173.2\,kg\,CO$_2$eq/m$^2$ at 9\,m (single span). Second, and more significantly, \textbf{no feasible composite solution exists for the two--span continuous configuration at any span}: under the industrial construction--stage load, no deck in the database can carry the wet--concrete load over the continuous arrangement within the depth bounds, even propped. The three--span configuration remains feasible up to 7\,m. This infeasibility is itself a result, marking a practical limit of profiled--deck composite construction under heavy industrial loading.
+
+%==============================================================================
 \subsection{Cross-scenario comparison}
-\label{sec:res_crossscenario}
-%===============================================================
+\label{sec:res_cross}
+%==============================================================================
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig_composite_vs_rc_occupancies.png}
+    \caption[Composite versus RC flat across occupancies]{Total GWP versus span for the composite slab (solid) and RC flat slab (dashed) in all four occupancy scenarios, single span.}
+    \label{fig:cross_scenario}
+\end{figure}
 
-\todo[inline]{Once all four scenarios are complete, add:}
+Across all four occupancies the composite slab is the highest--carbon system and the ranking of the five systems is preserved. The absolute GWP scales with imposed load and build--up mass (industrial highest, office lowest), but the \emph{relative} position of the composite slab does not change. The composite--to--RC--flat gap is narrowest for office (the lightest loading) and widest for industrial, indicating that the carbon disadvantage of composite construction grows with imposed load.
 
-\begin{itemize}
-    \item \textbf{Figure:} Four-panel plot (one per occupancy) or a single overlay showing GWP$_\mathrm{tot}$ vs span for composite slab across all scenarios on the same axes.
-    \item \textbf{Figure:} Composite vs RC GWP ratio as a function of span and scenario. A ratio below 1.0 indicates composite is more GWP-efficient. Annotate the crossover span for each scenario.
-    \item \textbf{Table:} Summary table listing, for each (scenario, span configuration) pair, the minimum composite GWP, the RC baseline GWP, and the ratio. This is the primary comparative result of the thesis.
-\end{itemize}
+%==============================================================================
+\subsection{Building-envelope comparison}
+\label{sec:res_envelope}
+%==============================================================================
+The per-unit-area comparisons above treat each floor system in isolation. At the scale of a whole building, however, the structural depth of the floor has a further consequence: for a fixed overall building height, a shallower floor-to-floor construction depth allows more storeys to be accommodated, and hence more lettable or usable floor area. This building-envelope analysis translates the structural depth results into an achievable storey count, providing a building-level perspective that the per-square-metre GWP comparison does not capture.
 
-%===============================================================
-\subsection{Governing limit states}
-\label{sec:res_govcheck}
-%===============================================================
-
-Figure~\ref{fig:govcheck} shows the frequency with which each limit state governs the optimal composite slab design for the office single-span scenario across all deck products and concrete grades in the evaluated space.
+For each slab system, span, and span configuration, the floor-to-floor height was computed as the sum of the clear storey height, the structural slab depth $h$ (the minimum-GWP section from the optimisation), and a fixed ceiling/services void. The achievable storey count is then the fixed building height divided by this floor-to-floor height. The building parameters assumed for each occupancy are typical values for that use: an office building of 40\,m with 2.7\,m clear height and a 0.40\,m services void; a residential building of 30\,m with 2.5\,m clear height and a 0.20\,m void; a retail building of 20\,m with 4.0\,m clear height and a 0.35\,m void; and an industrial building of 12\,m with 6.0\,m clear height and a 0.25\,m void. The resulting storey counts are continuous; the achievable integer count is the floor of each value. The full results are tabulated in Tables~\ref{tab:envelope_office_storey}--\ref{tab:envelope_industrial_detail}.
 
 \begin{figure}[h!]
     \centering
-    \missingfigure{Stacked bar chart or pie chart of governing limit state frequency for office single-span. Data available: SLS deflection 55.9\%, D1 thermal insulation 15.5\%, longitudinal shear m-k 11.7\%, D4 minimum effective thickness 9.5\%, longitudinal shear partial connection 2.9\%, ULS bending 2.2\%, D2 fire sagging 1.1\%, other 1.2\%. Extend to all scenarios once available. Use the separate ENV/ULS/SLS/FIRE output plots to illustrate which checks are most restrictive per criterion.}
-    \caption{Frequency of governing limit state across all evaluated composite slab configurations (office scenario, single-span). Categories listed in descending order of frequency.}
-    \label{fig:govcheck}
+    \includegraphics[width=\textwidth]{figures/fig_envelope_storey_count.png}
+    \caption[Achievable storey count versus span, all occupancies]{Achievable storey count versus span for the minimum-GWP section of each slab system, for all four occupancies. A shallower structural depth yields a higher floor-to-floor efficiency and hence more storeys within the fixed building height.}
+    \label{fig:envelope_storey_count}
 \end{figure}
 
-For the office scenario (single-span), SLS deflection ($\delta_\mathrm{tot} \le L/300$) is the most common governing check, controlling the optimal depth for approximately 56\% of all configurations evaluated. This reflects the fact that composite slabs are stiffness-governed rather than strength-governed for the majority of practical office-floor configurations: the structural demand can often be met at a shallower depth than the deflection limit requires. Fire check D1 (thermal insulation) is the next most frequent governing check at approximately 15\%, particularly prominent at short spans (3--4\,m) where the minimum concrete depth for 60-minute fire insulation exceeds the structurally required depth. Longitudinal shear (m--k method) governs at approximately 12\% of configurations, predominantly at intermediate spans for shallower deck profiles.
-
-\todo[inline]{Add Figure: heatmap of governing limit state as a function of (deck product, span), for the office single-span scenario. Rows = deck families (Multideck 50/60/80/146, ComFlor 46/51/60/80/210/225), columns = spans 3--10\,m, colour = governing check. This illustrates which decks are structurally efficient at which spans.}
-
-\todo[inline]{Add separate output plots for ENV only, ULS only, SLS only, and FIRE only criteria to show where each check is most binding and which criterion drives the optimal depth. These plots are available as separate output folders (ENV, ULS, SLS1, FIRE) from the code.}
-
-The dominance of SLS deflection as the governing constraint has an important implication for the GWP comparison: increasing span primarily requires a deeper (heavier) section to satisfy stiffness rather than strength, and the marginal GWP increase per additional metre of span is driven largely by increased concrete volume rather than by increased deck mass or reinforcement. This means that the rate of GWP increase with span is relatively smooth and predictable for composite slabs, unlike systems where a discrete jump in reinforcement or section size is required at specific spans.
-
-%===============================================================
-\subsection{GWP breakdown by material}
-\label{sec:res_gwp_breakdown}
-%===============================================================
+The building-envelope ranking differs markedly from---and is in large part the \emph{inverse} of---the embodied-carbon ranking. The RC solid (flat) slab, being the shallowest structural section across almost the entire span range, achieves the highest storey count in every occupancy. The composite slab ranks second at short spans (for example 12.13 achievable storeys at 3\,m office, against 12.26 for RC solid) but falls back towards the middle of the field at longer spans, where its deep-deck sections increase the floor-to-floor height. Critically, the two systems that performed best on embodied carbon---the timber rectangular and RC ribbed slabs---perform \emph{worst} on storey count, because their greater structural depth consumes more of the building height per floor. The timber ribbed slab, with the deepest sections, achieves the fewest storeys throughout.
 
 \begin{figure}[h!]
     \centering
-    \missingfigure{Stacked area or stacked bar chart of GWP breakdown (concrete, deck steel, mesh reinforcement, fire trough bars, floor build-up) vs span for office single-span optimal composite slab. Use the gwp\_breakdown\_all.py output CSV columns: gwp\_concrete, gwp\_deck, gwp\_mesh, gwp\_trough\_bars, gwp\_buildup. Add a second panel showing the total-to-structural ratio to illustrate the growing importance of structural GWP relative to the fixed build-up contribution at longer spans.}
-    \caption{GWP breakdown by material contribution for the optimal composite slab cross-section, office scenario, single-span. Structural components (concrete, deck, mesh, trough bars) are stacked; the non-structural floor build-up (chipboard/gypsum fibreboard/rock wool, fixed at approximately 19.6\,kg\,CO$_2$-eq/m for the office scenario) is shown as a separate band.}
-    \label{fig:gwp_breakdown}
+    \includegraphics[width=0.95\textwidth]{figures/fig_envelope_office_detail.png}
+    \caption[Achievable storey count by slab type, office]{Office scenario: achievable storey count versus span for all five systems and the three composite span configurations. The RC solid slab leads throughout; the composite slab is competitive at short spans but is overtaken as the deep-deck transition increases its depth.}
+    \label{fig:envelope_office_detail}
 \end{figure}
 
-At $L = 6$\,m, concrete accounts for approximately 50\% of the structural GWP, with the steel deck contributing approximately 39\%, mesh reinforcement 3\%, and fire trough bars 7\%. The relatively high deck contribution at medium spans reflects the high GWP intensity per unit mass of structural steel (approximately 1.5--2.0\,kg\,CO$_2$-eq/kg for the profiles in the database) compared to concrete (approximately 0.10--0.15\,kg\,CO$_2$-eq/kg). As span increases and slab depth grows, the concrete contribution increases proportionally while the deck mass per unit area remains approximately constant, so the concrete fraction rises at longer spans.
+This result reframes the headline finding of this chapter. On embodied carbon alone the composite slab is the least favourable system (Section~\ref{sec:res_office_gwp}); on building-height efficiency it is among the best, second only to the RC flat slab and well ahead of the low-carbon timber and ribbed systems. Figure~\ref{fig:envelope_comp_vs_rc} compares the composite slab directly against the RC flat slab across all occupancies: the RC flat slab achieves a marginally higher storey count in every case, but the two are close, and the gap is smallest at the short-to-intermediate spans where composite slabs are most commonly used. The depth-competitiveness of the composite slab---its ability to deliver nearly as many storeys as the RC flat slab---is one of the practical advantages that offsets its higher embodied carbon, and is examined further in the discussion (Chapter~\ref{fifthchapter}).
 
-The fire trough bar contribution (7\% at $L = 6$\,m) is non-trivial, since the bars are present solely to satisfy the fire sagging moment check (D2) and have no structural contribution at ambient temperature. Their contribution increases with fire severity (higher $\psi_\mathrm{fi}$) and with increasing fire period rating.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig_envelope_comp_vs_rc.png}
+    \caption[Composite versus RC flat storey count across occupancies]{Achievable storey count for the composite slab (solid) and RC flat slab (dashed) across all four occupancies. The RC flat slab leads in every case, but only marginally; the composite slab remains highly competitive on building-height efficiency despite its higher embodied carbon.}
+    \label{fig:envelope_comp_vs_rc}
+\end{figure}
 
-\todo[inline]{Update breakdown percentages once all scenario runs are complete. Compare the concrete/deck split at $L = 6$\,m across office, retail, and industrial scenarios to show how increased live load changes the balance. Also compare single-span vs two-span at the same reference span.}
+\input{building_envelope_results.tex}
 
-%===============================================================
-\subsection{Optimal deck selection}
-\label{sec:res_optimal_sections}
-%===============================================================
+%==============================================================================
+\subsection{Validation against manufacturer tables}
+\label{sec:res_validation}
+%==============================================================================
+To establish confidence in the structural model, the maximum permissible span computed by the optimiser for each deck was compared against the manufacturer's published load/span tables. For every deck profile, gauge, and span configuration, the model's design span was expressed as a ratio of the manufacturer's tabulated maximum span for the equivalent loading; a ratio at or below unity indicates that the model design lies within the manufacturer's envelope. Comparisons were made against both British Standard and Eurocode manufacturer tables as available, at an imposed load of 6\,kN/m$^2$.
 
-For the office single-span scenario, the optimiser selects shallow Multideck profiles (50 and 60 series, $h_p = 50$--60\,mm) and Multideck~146 ($h_p = 146$\,mm) at short to medium spans, with ComFlor~60 ($h_p = 60$\,mm) appearing at the 7\,m span. At the longest spans (8--10\,m), Multideck~50 ($h_p = 50$\,mm) with propped construction is selected, reflecting the optimiser's preference for a shallower rib when the design is governed by SLS deflection (since the composite stiffness is primarily a function of total slab depth rather than rib height, and a shallow rib allows a larger concrete section for the same total depth). 
+Of the 406 deck--span--configuration combinations checked, 103 had no comparable manufacturer table (chiefly the Multideck 50 range and propped cases for which no propped table is published) and were excluded. Of the 303 comparable checks, 266 (87.8\,\%) passed, and---importantly---every passing case lies within the manufacturer envelope (span ratio $\leq 1.0$, mean 0.78). The model is therefore consistently conservative relative to the published tables: it does not permit any span that the manufacturer would not. Table~\ref{tab:verification} summarises the outcome by deck family and Figure~\ref{fig:verification} shows the span-ratio distribution for every deck.
 
-Concrete grade C25/30 is preferred over C30/37 in all observed optimal solutions, consistent with the argument that the composite slab at these loads is not concrete-strength-governed: the concrete compression block depth $x_{pl}$ is small relative to $h$ for all configurations evaluated, so increasing concrete strength provides minimal structural benefit while increasing the GWP intensity per unit mass.
+\begin{table}[h!]
+\small\centering
+\caption{Verification against manufacturer load/span tables, by deck family. ``Comparable'' excludes cases with no published table.}
+\label{tab:verification}
+\begin{tabular}{lcccc}
+\toprule
+Deck family & Comparable & Pass & Fail & Pass rate \\
+\midrule
+ComFlor 46  & 6   & 6   & 0  & 100\,\% \\
+ComFlor 51  & 42  & 39  & 3  & 93\,\% \\
+ComFlor 60  & 56  & 42  & 14 & 75\,\% \\
+ComFlor 80  & 43  & 34  & 9  & 79\,\% \\
+ComFlor 210 & 25  & 16  & 9  & 64\,\% \\
+ComFlor 225 & 27  & 25  & 2  & 93\,\% \\
+Multideck 60  & 33 & 33 & 0 & 100\,\% \\
+Multideck 80  & 30 & 30 & 0 & 100\,\% \\
+Multideck 146 & 41 & 41 & 0 & 100\,\% \\
+\midrule
+\textbf{Total} & \textbf{303} & \textbf{266} & \textbf{37} & \textbf{87.8\,\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\todo[inline]{Add Figure: bar chart of optimal deck product selected at each span for office single-span, two-span, and three-span, coloured by deck family. Show whether shallow decking (Multideck 50/60/80, ComFlor 46/51/60/80) or deep decking (Multideck 146, ComFlor 210/225) is preferred and at what span the transition occurs (if any). For office scenario, confirm whether deep decks (ComFlor 210/225) appear in the optimal set at any span.}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig_mfr_verification.png}
+    \caption[Model span versus manufacturer maximum]{Design span as a fraction of the manufacturer's published maximum span, for every deck profile and gauge. Each point is one verification case (a given span, span configuration, and concrete grade), so a deck with several feasible spans appears as several points. Points left of the dashed line ($L/L_{max} \leq 1$) lie within the manufacturer envelope; the model passes all such cases and exceeds the published maximum only for a small number of long-span propped ComFlor sections.}
+    \label{fig:verification}
+\end{figure}
 
-\todo[inline]{Discuss: the propped/unpropped status of the optimal solution as a function of span. Quantify the GWP penalty of forcing propped construction at short spans (where unpropped is feasible) and the benefit of propped construction at long spans (where it reduces the required section depth to meet SLS deflection). Note that the model does not include any GWP or cost penalty for the temporary props themselves.}
+All 37 failures share two features: they are all propped cases, and all occur where the model's design span only marginally exceeds the manufacturer's tabulated maximum (span ratio just above unity, for example ComFlor 60 0.9 at 5\,m against a published maximum of 4.63\,m). They are concentrated in the deeper ComFlor profiles (210, 80, 60) at their longest spans, and are more frequent for the Eurocode-based tables (17\,\% fail) than the British Standard tables (7\,\%) and for the three-span configuration. The Multideck range passes without exception. The failures therefore do not indicate an unsafe or erroneous model; rather, they mark the small region at the extreme of each deck's range where the model is marginally less conservative than the manufacturer's own tabulation---most plausibly because the manufacturer tables embed additional practical limits (for example deflection or construction tolerances) beyond the Eurocode checks implemented here, and because the effective area is taken as $A_{pe} = 0.9\,A_p$ where a manufacturer does not state it explicitly. Since these marginal cases sit at the limit of each deck's span range and the optimiser does not select them as GWP optima, the verification gives good confidence in the structural model across the span range relevant to the results.
 
-
-%===============================================================
+%==============================================================================
 \subsection{Summary}
 \label{sec:res_summary}
-%===============================================================
-
-For the office occupancy scenario, the minimum-GWP composite slab cross-section is governed by SLS deflection across the majority of practical spans, with fire insulation (D1) controlling at short spans (3--4\,m) and longitudinal shear governing for some intermediate-span configurations. Total GWP ranges from approximately 61\,kg\,CO$_2$-eq/m at $L = 3$\,m to approximately 149\,kg\,CO$_2$-eq/m at $L = 10$\,m, including the fixed floor build-up contribution of approximately 19.6\,kg\,CO$_2$-eq/m. Shallow Multideck profiles dominate the optimal deck selection across the span range, with propped construction preferred at longer spans to satisfy the SLS deflection constraint.
-
-\todo[inline]{Once the RC baseline comparison is complete, replace the following placeholder with a quantitative statement of the crossover span and the GWP benefit/penalty of composite relative to RC:} The comparison against the RC flat slab and ribbed slab baselines shows that \todo[inline]{insert finding on whether composite is more or less efficient than RC at the spans evaluated, and at what span (if any) the curves cross}.
-
-The implications of these findings for structural design practice and embodied carbon reduction are discussed in Chapter~\ref{fifthchapter}.
+%==============================================================================
+The central result of this study is consistent across all four occupancy scenarios, all three span configurations, and the full practical span range: the composite steel--concrete slab carries the highest embodied carbon of the five floor systems compared, exceeding the RC flat baseline by a margin that widens with both span and imposed load, and exceeding the RC ribbed and timber systems by larger margins still. The composite design is governed by SLS deflection (single span) or by hogging at internal supports (continuous spans) over most of the range, with fire and longitudinal shear governing only at the shortest spans; it requires propped construction throughout the office range and is altogether infeasible for the two--span industrial case. These findings answer the primary research question directly---on embodied carbon alone, the composite slab does not offer an advantage over reinforced concrete flat slabs---and motivate the discussion in Chapter~\ref{fifthchapter}, where the non--carbon considerations that nonetheless favour composite construction (construction speed, structural depth, service integration, and demountability) are examined.

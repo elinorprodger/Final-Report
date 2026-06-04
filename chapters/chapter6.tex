@@ -1,2 +1,53 @@
 \section{Conclusion}
 \label{sixthchapter}
+
+This thesis set out to evaluate the potential of composite steel--concrete floor slabs for sustainable structural design, by quantifying their embodied carbon relative to conventional reinforced concrete slabs across a range of practical spans and occupancy scenarios. This concluding chapter summarises the work undertaken, states the principal findings, answers the central research question, and sets out recommendations for further work.
+
+%==============================================================================
+\subsection{Summary of the work}
+\label{sec:concl_summary}
+%==============================================================================
+The pre-existing GWP optimisation framework of the Chair of Concrete Structures and Bridge Design was extended to incorporate composite steel--concrete slab cross-sections. A \texttt{CompositeSlab} class and associated optimisation routines were developed, implementing the full staged Eurocode design of composite construction---construction stage, composite stage, fire (EN~1994-1-2 Annex~D), and serviceability checks---and supported by a database of commercially available profiled steel decking products with their mechanical properties and EPD-derived GWP values. This enabled, for the first time within the framework, a systematic and consistent comparison between composite slabs and reinforced concrete and timber baselines under identical loading assumptions, design standards, and environmental accounting. The model was applied across four occupancy scenarios (office, residential, retail, industrial), three span configurations (single, two-, and three-span continuous), and spans of \todo[inline]{3--10}\,m, with the minimum-GWP cross-section identified for each combination.
+
+%==============================================================================
+\subsection{Principal findings}
+\label{sec:concl_findings}
+%==============================================================================
+The principal findings are as follows.
+
+\begin{itemize}
+    \item \textbf{Composite slabs carry the highest embodied carbon of the systems compared.} Across every span, occupancy, and span configuration, the composite slab had a higher total GWP than the reinforced concrete flat slab, the RC ribbed slab, and both timber systems. \todo[inline]{Insert the headline office single-span range, e.g. composite X--Y kg CO2eq/m2 vs RC flat A--B and RC ribbed C--D, and the composite-to-RC-ribbed factor at the longest span, from final results.}
+
+    \item \textbf{The disadvantage widens with span and with imposed load.} The gap between the composite slab and the reinforced concrete baselines grew with span---driven by an SLS-deflection-governed transition to deep decking---and was largest for the most heavily loaded (industrial) scenario and smallest for the office scenario.
+
+    \item \textbf{The composite slab is stiffness-governed.} SLS deflection controlled the single-span optima from \todo[inline]{~5}\,m upward, and hogging at internal supports controlled the continuous configurations. Strength and fire checks governed only at the shortest spans. Added depth, and hence GWP, was therefore driven by serviceability rather than load capacity, which also explains the insensitivity of the optimum to concrete grade.
+
+    \item \textbf{Continuity has a non-monotonic effect on composite GWP.} Designing the slab as continuous reduced GWP at intermediate spans, where a shallow deck could be retained, but penalised it at long spans, where the support hogging moment forced a deeper section; the two-span industrial configuration was infeasible for all decks in the database.
+
+    \item \textbf{The steel deck dominates the composite GWP.} The profiled steel deck was the single largest material contributor at most spans, despite its small mass share, reflecting the high GWP intensity of structural steel relative to concrete.
+\end{itemize}
+
+%==============================================================================
+\subsection{Answer to the research question}
+\label{sec:concl_answer}
+%==============================================================================
+The central question of this thesis was whether the structural and constructional advantages of the composite arrangement translate into a net reduction in embodied carbon relative to a conventional RC flat slab designed to the same requirements. On the basis of a cradle-to-gate comparison of structural and floor-build-up GWP, the answer is that \textbf{they do not}: the composite slab is consistently the higher-carbon option, and no crossover span or occupancy was found at which it became competitive with reinforced concrete on embodied carbon alone.
+
+This finding should not, however, be read as a case against composite construction. As discussed in Chapter~\ref{fifthchapter}, embodied carbon is one criterion among several, and the factors that make composite floors attractive in practice---rapid construction, reduced formwork, long spans, service integration, lighter self-weight than solid RC, and the recyclability and potential demountability of the steel components---are not captured by a per-square-metre cradle-to-gate GWP figure. The contribution of this work is to quantify the embodied-carbon term of that multi-criteria decision precisely, and to show how it varies with span, occupancy, and continuity, so that it can be weighed against the others on a consistent basis. \todo[inline]{If the building-envelope results (Section~\ref{sec:res_envelope}) change this conclusion at the building scale --- e.g. if reduced storey height offsets the slab GWP --- qualify the answer accordingly once those results are final.}
+
+%==============================================================================
+\subsection{Recommendations for further work}
+\label{sec:concl_future}
+%==============================================================================
+The following extensions would build directly on this work:
+
+\begin{itemize}
+    \item \textbf{Cost and programme analysis} alongside the GWP comparison, to test whether the embodied-carbon penalty of composite construction is offset by savings in cost and construction time---converting the multi-criteria argument into quantified terms.
+    \item \textbf{Low-carbon steel sensitivity.} Since the composite GWP is dominated by the steel deck, recomputing the results with recycled-content or electric-arc-furnace steel would establish how far a lower-carbon supply chain narrows the gap to the reinforced concrete systems.
+    \item \textbf{Extended LCA boundary.} Incorporating end-of-life and material-recovery stages (module~D) would credit the recyclability and demountability of the steel components, which the cradle-to-gate boundary used here does not.
+    \item \textbf{Consistent continuous-span comparison.} Extending the RC ribbed and timber systems to continuous spans would allow a fully consistent cross-system comparison in the continuous configurations.
+    \item \textbf{Swiss-market applicability.} Confirming the availability of the deck products in the Swiss market, and investigating a hollow-core or alternative ribbed system where decking is not readily available, would improve the direct applicability of the results to Swiss practice.
+    \item \textbf{Vibration at detailed design.} Because the slab-only vibration screening is conservative and the full-floor frequency falls below it once beam flexibility is included, a full-floor vibration assessment is recommended for long-span office floors at detailed design.
+\end{itemize}
+
+\todo[inline]{Optional closing sentence tying the work back to the broader sustainability motivation of Chapter~\ref{firstchapter} --- e.g. that consistent, design-code-compliant embodied-carbon comparison tools of this kind support better-informed material choices in early-stage structural design.}

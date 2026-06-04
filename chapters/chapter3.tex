@@ -1,9 +1,6 @@
 \section{Methodology}
 \label{thirdchapter}
 
-%===============================================================
-\subsection{Introduction}
-%===============================================================
 This chapter presents the methodology developed to evaluate and optimise composite steel--concrete floor slabs with respect to Global Warming Potential (GWP). The approach extends an existing parametric optimisation framework, originally developed by the Chair of Concrete Structures and Bridge Design at ETH Zurich for reinforced concrete and timber slab systems, to incorporate composite slab cross-sections. This extension enables the first systematic Eurocode-compliant comparison between conventional reinforced concrete flat slabs and composite slabs across a range of practical span lengths and occupancy scenarios. The methodology is implemented in Python and structured around a relational database of commercially available deck and concrete products, from which minimum-GWP cross-sections are identified for each span using a scalar bounded optimisation algorithm. The overall workflow, including the loop structure, the optimisation step, and the limit-state checks, is summarised in Figure~\ref{fig:code_flowchart}.
 
 The chapter is structured as follows. Section~\ref{sec:prior_work} describes the pre-existing framework that this work extends. Section~\ref{sec:database} details the material and product database. Section~\ref{sec:casestudies} defines the case studies, including loading scenarios and floor build-ups. Section~\ref{sec:design_vars} sets out the design variables and design parameters. Section~\ref{sec:design_procedure} presents the structural verification procedure with the governing equations for each limit state, followed by the fire and acoustic design provisions. Section~\ref{sec:env_impact} outlines the environmental impact calculation. Section~\ref{sec:optimisation} describes the optimisation algorithm and convergence behaviour. Section~\ref{sec:validation} reports the validation against manufacturer design tables. Finally, Section~\ref{sec:assumptions} sets out the principal assumptions and limitations of the methodology.
@@ -251,9 +248,9 @@ Structural verification follows the staged nature of composite construction, dis
 \toprule
 \textbf{Stage} & \textbf{Check} & \textbf{Reference} \\
 \midrule
-Construction$^{\dagger}$ & ULS bending (sagging) & EN 1993-1-3 Cl.\,5.4.3, EN 1994-1-1 Cl.\,9.3 \\
-Construction$^{\dagger}$ & ULS web shear buckling      & EN 1993-1-3 Cl.\,6.1.5 \\
-Construction$^{\dagger}$ & SLS deflection              & EN 1994-1-1 Cl.\,9.3.2; UK NA \\
+Construction & ULS bending (sagging) & EN 1993-1-3 Cl.\,5.4.3, EN 1994-1-1 Cl.\,9.3 \\
+Construction & ULS web shear buckling      & EN 1993-1-3 Cl.\,6.1.5 \\
+Construction & SLS deflection              & EN 1994-1-1 Cl.\,9.3.2; UK NA \\
 Composite    & ULS sagging moment          & EN 1994-1-1 Cl.\,9.7.2 \\
 Composite    & ULS longitudinal shear      & EN 1994-1-1 Cl.\,9.7.3 (m--k) or 9.7.5 ($\tau_u$) \\
 Composite    & ULS vertical shear          & EN 1994-1-1 Cl.\,9.7.5; EN 1992-1-1 Cl.\,6.2.2 (2004)\\
@@ -266,8 +263,6 @@ Fire         & D4: minimum effective thickness & EN 1994-1-2 Annex D, Table D.6 
 Fire         & D5: field of application    & EN 1994-1-2 Annex D, Table D.7 \\
 \bottomrule
 \end{tabular}
-\vspace{2pt}\\
-{\footnotesize $^{\dagger}$ For propped construction, a single prop at midspan divides the span into two simply-supported $L/2$ sub-spans during casting (EN~1994-1-1 Cl.\,9.3.1); the construction-stage checks are therefore performed against the $L/2$ sub-span rather than omitted.}
 \end{table}
 
 \subsubsection*{Construction stage}
@@ -384,6 +379,8 @@ where $z = h - 0.5\,x_{pl} - e_p + (e_p - e)(1 - \eta)$ is the lever arm (mm), $
     \label{eq:mpr}
 \end{equation}
 where $M_{pa}$ is the bending resistance of the profiled steel sheeting (found in the database). The check is $M_{Ed} \le M_{Rd}$ where $M_{Ed} = \left(\alpha_{M,\mathrm{sag}} + r\,\alpha_{M,\mathrm{hog}}/2\right) w_\mathrm{ULS}\, L^2$ using the span-dependent coefficients of Table~\ref{tab:moment_coeffs}.
+
+End anchorage by through-deck welded headed studs (4-1-1/9.7.4) can enhance the longitudinal shear resistance of a composite slab, but is deliberately omitted from the design procedure in this study. The rationale is given in Section~\ref{sec:assumptions}; in brief, end anchorage cannot be applied consistently across the deck database, because its benefit can only be credited for decks characterised by the partial connection ($\tau_{u,Rk}$) method and not for those characterised solely by the m--k constants. The longitudinal shear resistance is therefore taken throughout as the embossment-and-friction shear bond alone, $N_c = \tau_{u,Rd}\,b\,L_x$ (or the m--k resistance of Equation~\eqref{eq:mk}), with no contribution from mechanical connectors. A quantitative assessment of the resistance that end anchorage would have provided, had it been included, is presented in Appendix~\ref{app:end_anchorage}.
 
 \paragraph{ULS vertical shear.} Vertical shear is verified per 4-1-1/9.7.5, treating the effective deck area as equivalent tensile reinforcement and using the 2-1-1/6.2.2 (2004) formula for members without shear reinforcement:
 \begin{equation}
@@ -550,24 +547,42 @@ This slab-only frequency is deliberately conservative as a screening check: the 
  
 At longer office spans, vibration is likely to govern the overall composite floor design once beams are also considered. The implications are discussed further in Section~\ref{sec:assumptions}.
 
-\todo[inline]{Add full bay configuration example to appendix.}
-
 \subsubsection*{Acoustic performance}
 \label{sec:acoustic}
 
 Acoustic performance is not incorporated as a structural constraint within the optimisation. Instead, the floor build-up for each occupancy scenario (Table~\ref{tab:floor_buildup}) is pre-selected to meet the applicable acoustic requirements, and its GWP contribution is added to $\mathrm{GWP}_\mathrm{total}$ as described in Section~\ref{sec:env_impact}.
 
-The two phenomena of concern are airborne sound transmission and impact sound transmission. In Switzerland, SIA~181 \citep{RefWorks:sia181} expresses its requirements using a standardised level difference $D_i$ for airborne sound and a standardised impact sound pressure level $L'_i$ for impact sound, set according to a classification of the sensitivity of the receiving space and the noise exposure.  In the United Kingdom, Approved Document~E \citep{RefWorks:adePartE} specifies field-measured requirements for separating floors for the standardised weighted sound level difference including a spectrum adaptation term ($D_{nT,w}+C_\mathrm{tr}$) and standrdised weighted impact sound preseure ($L'_{nT,w}$) levels. The requirements for each use case are given in Table~.
+The two phenomena of concern are airborne sound transmission and impact sound transmission. In Switzerland, SIA~181 \citep{RefWorks:sia181} expresses its requirements using a standardised level difference $D_i$ for airborne sound and a standardised impact sound pressure level $L'_i$ for impact sound, set according to a classification of the sensitivity of the receiving space and the noise exposure.  In the United Kingdom, Approved Document~E \citep{RefWorks:adePartE} specifies field-measured requirements for separating floors for the standardised weighted sound level difference including a spectrum adaptation term ($D_{nT,w}+C_\mathrm{tr}$) and the standardised weighted impact sound pressure level ($L'_{nT,w}$). The design requirements for each occupancy scenario are summarised in Table~\ref{tab:acoustic_requirements}.
 
-\todo[inline]{Add table of the requirements from word document 'acoustic checks'}
+\begin{table}[h!]
+\small
+\centering
+\caption{Acoustic design requirements by occupancy scenario}
+\label{tab:acoustic_requirements}
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{\textbf{Switzerland (SIA~181)}} & \multicolumn{2}{c}{\textbf{UK}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Scenario & Airborne $D_i$ & Impact $L'_i$ & Airborne & Impact \\
+         & [dB] & [dB] & [dB] & [dB] \\
+\midrule
+Residential & $\ge 52$--$56$ & $\le 53$--$49$ & $D_{nT,w}+C_\mathrm{tr} \ge 45$ & $L'_{nT,w} \le 62$ \\
+Office      & $\ge 52$--$56$ & $\le 53$--$49$ & $D_{nT,w} \ge 45$               & --- \\
+Retail      & $\ge 47$       & $\le 58$        & $D_{nT,w}+C_\mathrm{tr} \ge 45$ & $L'_{nT,w} \le 62$ \\
+Industrial  & ---            & ---             & ---                             & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\todo[inline]{Explain method for making the floor build ups.}
+The acoustic performance of each floor build-up was estimated using the SCI publications P321 \citep{RefWorks:RefID:acousticslimdek} and P322 \citep{RefWorks:acousticcomposite}, which provide predicted in-situ performance ranges for a range of composite floor build-up types (screed, platform, raft, and cradle floors). SIA~181 was adopted as the governing standard, since it is the more conservative requirement and sets the binding constraint for the floor build-up choice in all occupancy scenarios where acoustic performance is relevant. The UK Approved Document~E and British Council of Offices (BCO) requirements were used as a cross-check; in all cases the build-up selected for SIA~181 compliance was found to satisfy the UK requirements as well. For each occupancy scenario, the minimum-GWP build-up type whose predicted performance envelope (from SCI~P321/P322) met or exceeded the applicable SIA~181 requirement was identified. Composite slabs with profiled steel decking have lower mass per unit area than solid reinforced concrete slabs of equivalent structural depth, owing to the void volume within the deck ribs. This lower mass reduces the inherent airborne sound insulation of the bare slab relative to solid concrete, and means that supplementary build-up layers are required to satisfy both airborne and impact sound requirements in the residential and office scenarios.
 
-The acoustic performance of each floor build up was estimated using the SCI publications 321 \citep{RefWorks:RefID:acousticslimdek} and 322 \citep{RefWorks:acousticcomposite}.
+For the \textbf{residential} scenario, a cement screed (85\,mm) over glass wool insulation (30\,mm) with a parquet walking surface (11\,mm) is adopted. From SCI~P322, a screed floor on a composite deck achieves $D_{nT,w}+C_\mathrm{tr} = 50$--$57$\,dB and $L'_{nT,w} = 40$--$50$\,dB, which satisfies the SIA~181 minimum requirement for medium sensitivity ($D_i \ge 52$\,dB, $L'_i \le 53$\,dB) and the UK Approved Document~E requirement ($D_{nT,w}+C_\mathrm{tr} \ge 45$\,dB, $L'_{nT,w} \le 62$\,dB).
 
-For the \textbf{office} scenario, the build-up consists of a raised access floor system comprising a chipboard panel (18\,mm), gypsum fibreboard (19\,mm), and rock wool insulation (30\,mm). Raised access floors are widely used in commercial office fit-out to route mechanical and electrical services and are compatible with composite slab construction without structural modifications.
+For the \textbf{office} scenario, a raised access floor system comprising chipboard panel (18\,mm) over gypsum fibreboard (19\,mm) and rock wool insulation (30\,mm) is adopted. Raised access floors are widely used in commercial fit-out to distribute mechanical and electrical services and are compatible with composite slab construction without structural modification. From SCI~P322, a platform floor construction achieves $D_{nT,w}+C_\mathrm{tr} = 52$--$57$\,dB, meeting the SIA~181 medium-sensitivity airborne requirement ($D_i \ge 52$\,dB) and the UK airborne target ($D_{nT,w} \ge 45$\,dB). No impact requirement applies in the UK office context; the SIA~181 impact requirement ($L'_i \le 53$\,dB) is met by the resilient rock wool layer.
 
-For the \textbf{residential} scenario, the build-up comprises a two-layer factory-sealed parquet (11\,mm) over a cement screed (85\,mm) and glass wool insulation (30\,mm). For the \textbf{retail} scenario, a parquet finish over gypsum fibreboard and glass wool insulation is adopted. For the \textbf{industrial} scenario, a cement screed over rock wool insulation provides impact damping with minimal additional GWP. 
+For the \textbf{retail} scenario, a parquet walking surface (11\,mm) over gypsum fibreboard (19\,mm) and glass wool insulation (25\,mm) is adopted. SIA~181 applies a lower (less stringent) sensitivity classification to retail spaces ($D_i \ge 47$\,dB, $L'_i \le 58$\,dB), which is satisfied by this lightweight build-up at a lower GWP cost than the residential screed construction.
+
+For the \textbf{industrial} scenario, a cement screed (85\,mm) over rock wool insulation (30\,mm) is adopted. No inter-floor acoustic performance requirement applies to industrial buildings under SIA~181 or under Approved Document~E; the build-up is selected instead to provide a hardwearing walking surface and minimal additional GWP, with the screed also contributing to the slab's fire performance.
 
 %===============================================================
 \subsection{Environmental impact}
@@ -624,7 +639,9 @@ For the \texttt{CompositeSlab} class, the function \texttt{opt\_comp\_slab} in \
 
 The objective function is the structural GWP of the cross-section per Equation~\eqref{eq:gwp_structure}. Structural constraints are incorporated via a penalty function: the objective is multiplied by a factor $(1 + \Pi)$, where $\Pi$ is the sum of constraint violation penalties proportional to the degree of each violation, with large penalty coefficients (of order $10^5$) applied to ensure that infeasible cross-sections are strongly discouraged. The combined feasibility criterion (\texttt{ENV} in the implementation) requires simultaneous satisfaction of all construction-stage and composite-stage limit states together with the applicable fire checks.
 
-The outer optimisation loop iterates over all combinations of deck product and concrete grade in the database. The global minimum across all discrete combinations is taken as the optimal design for that span. Propping is handled at the outer loop level: an unpropped optimisation is first attempted, and if no feasible solution is found (i.e.\ the optimal section still fails at least one check at $h = 500$\,mm), a propped optimisation is run for the same (deck, concrete grade) combination. The propped/unpropped status of the final result is recorded and reported alongside the optimal GWP and cross-section geometry.\todo[inline]{check the logic for propped construction, may need to change flowchart and explanation}
+The outer optimisation loop iterates over all combinations of deck product and concrete grade in the database. Both propped and unpropped optimisations are performed independently for every deck--concrete grade combination; each produces either a feasible optimal depth or records infeasibility across the full search range. The reported optimum is then selected in two stages. First, the minimum-GWP section is identified among all \emph{unpropped} feasible solutions across all deck--concrete combinations. If at least one unpropped feasible solution exists, that section is the reported optimum, regardless of whether a propped configuration with lower GWP might also be available. Only when no unpropped solution is feasible for any deck or concrete grade at a given span does the selection fall back to the minimum-GWP propped section.
+
+This preference for unpropped construction reflects standard practice: unpropped casting avoids the cost, programme impact, and load-path complexity of temporary propping, and is the default assumption for composite slab construction wherever the deck can carry the wet-concrete load unaided. The model therefore never selects a propped solution purely on GWP grounds; propped construction appears in the results only where the construction-stage checks are infeasible for all unpropped deck--concrete combinations at the span in question. The propped/unpropped status of every reported optimum is recorded in the output data and indicated on the GWP--span plots.
 
 The RC rectangular slab, RC ribbed slab, and timber cross-sections are optimised using the basin-hopping algorithm from the SciPy optimisation library \citep{RefWorks:wales1997global}, which combines a global stochastic search with a local Powell minimiser. These cross-sections have multiple continuous variables (height, reinforcement diameter) for which a multi-variable global search is appropriate. The composite slab, with its single continuous variable and large outer enumeration over discrete deck--concrete combinations, does not benefit from this approach and converges reliably with the bounded scalar method.
 
@@ -661,6 +678,9 @@ For multi-span configurations, the steel deck is assumed to be continuous (lappe
 \paragraph{Local resistance checks (construction stage) not implemented.}
 Local resistance checks at supports per EN~1993-1-3 Cl.\,6.1.7 (web crippling and combined bending plus support reaction) are not currently implemented. These checks are not expected to control for the span and load ranges considered.
 
+\paragraph{End anchorage omitted.}
+End anchorage by through-deck welded headed studs (4-1-1/9.7.4) is excluded from the longitudinal shear resistance throughout this study. The omission is a deliberate consistency measure rather than a conservative simplification of convenience. The benefit of end anchorage can only be credited within the partial connection method, which requires the characteristic shear bond strength $\tau_{u,Rk}$; it cannot be credited for decks characterised solely by the m--k constants, because the m--k method is empirical and not based on a mechanical model and therefore cannot separate the contribution of mechanical connectors from the measured shear bond \citep{RefWorks:bode1993modern}. Since the deck database contains products characterised by both methods, crediting end anchorage only for the $\tau_u$ decks would introduce an inconsistent basis of comparison---the same physical enhancement would be rewarded for some products and ignored for others purely because of how each manufacturer chose to report its test data. Omitting end anchorage for all decks restores a consistent basis and yields a conservative longitudinal shear resistance in every case. The resistance forgone by this choice is quantified in Appendix~\ref{app:end_anchorage}, which compares the moment capacity with and without end anchorage across all $\tau_u$ decks and presents a worked example for a representative section; the comparison confirms that end anchorage would increase the partial-connection moment resistance, but that omitting it does not alter the principal comparative conclusions, since longitudinal shear rarely governs the optimal sections (Section~\ref{sec:res_gov_office}).
+
 \subsubsection*{Material and EPD assumptions}
 
 \paragraph{Concrete grade range C25/30 to C30/37.}
@@ -668,5 +688,6 @@ Only normal-weight concrete grades C25/30 and C30/37 are considered, as increase
 \todo[inline]{add reference to section later on which discusses effect of running with C20 as it seems to work structurally even if its not industry practice}
 
 \paragraph{Granularity of deck EPDs.}
-Tata Steel publish individual EPDs for each ComFlor profile and gauge combination. Kingspan publish a single EPD per tonne of steel for the entire Multideck range. ArcelorMittal Cofraplus and Cofrastra products are included in the database but are excluded from the main optimisation runs: ArcelorMittal publish a single EPD covering all deck profiles regardless of depth or gauge, which does not reflect the substantially different steel quantities per unit area between shallow and deep profiles. After comparing individual manufacturer EPDs with the KBOB reference database, it was determined that the ArcelorMittal single-EPD approach would severely underrepresent the GWP of all decking profiles, introducing a systematic bias that would distort the comparative results. Tata Steel and Kingspan products are therefore retained as the primary optimisation dataset. The KBOB GWP value for coated flat steel is 3.64 kg co2eq/kg steel, ComFlor's EPDs provide a GWP of between 2.83 and 3.09, Mutlideck has a value of 2.50 while Arcelor Mittal's EPD has a range of between 0.93 and 2.11.
-\todo[inline]{Rewrite this paragraph better.}
+Tata Steel publishes individual EPDs per unit area (kg\,CO$_2$eq/m$^2$) for each ComFlor profile and gauge combination, giving profile-specific values that correctly reflect the variation in steel mass per m$^2$ across the range. Converting to a per-kilogram basis yields a GWP of 2.79--3.09\,kg\,CO$_2$eq/kg across the ComFlor product range included in the database. Kingspan publishes a single EPD declared per tonne of steel, applicable to the entire Multideck range, giving a constant 2.50\,kg\,CO$_2$eq/kg. Although this is a product-range aggregate rather than a profile-specific declaration, the per-tonne basis is physically consistent: heavier profiles automatically attract proportionally higher GWP, so the single EPD does not introduce a systematic bias between light and heavy gauges.
+
+ArcelorMittal Cofraplus and Cofrastra products are retained in the database but excluded from the main optimisation runs. ArcelorMittal publishes a single EPD declared per unit area (18.0\,kg\,CO$_2$eq/m$^2$) applicable to all deck profiles regardless of depth or gauge. This relationship is physically implausible: a heavier profile requires more steel and more manufacturing energy per m$^2$, so its GWP per m$^2$ should be higher, not equal. The consequence is that deep, heavy decking profiles appear substantially greener under the ArcelorMittal EPD than under independent references. The KBOB reference value for galvanised sheet steel is 3.64\,kg\,CO$_2$eq/kg \citep{RefWorks:kbob2022}, further contextualising the ArcelorMittal implied values as severely underestimated across all but the very lightest gauges. Including ArcelorMittal products in the optimisation would therefore produce a systematic bias in favour of deep composite slabs --- precisely the configuration where the EPD underestimation is most severe --- distorting the comparative GWP rankings in a way that cannot be corrected without product-specific declarations. Tata Steel and Kingspan products are accordingly retained as the primary dataset.

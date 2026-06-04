@@ -3,26 +3,25 @@
 \label{appendix}
 %===============================================================
 \subsection{AI Use Declaration}
-To ensure transparency and uphold academic integrity, the following table outlines the artificial intelligence (AI) tools utilized during the preparation of this report. This declaration aligns with ETH Zurich's guidelines on the responsible use of AI in scientific writing.
+To ensure transparency and uphold academic integrity, the following outlines the artificial intelligence (AI) tools utilized during the preparation of this report. This declaration aligns with ETH Zurich's guidelines on the responsible use of AI in scientific writing. Claude Sonnet 4.6 and Opus 4.8 were used to debug python scripts, improve structure and readability of code and generate the figures presented in this report as well as extract data (such as tables) from PDFs. The AI-generated outputs were reviewed, verified and adapted to ensure accuracy and relevance to the project topic. Deep-L was used for translation of key documents, however technical terminology was checked manually. I affirm that all code and figures have been verified and no AI-generated content has been presented as my own research.
 
-documentation?
-other figures not used?
-code?
-
+%===============================================================
 \subsection{Decking product database}
 \label{app:decking_db}
+%===============================================================
 The tables below list all profiled steel decking products included in the optimisation database, with geometry and section properties (Table~\ref{tab:deck_db_geom}) and structural resistances with EPD data (Table~\ref{tab:deck_db_resist}). Values are sourced from manufacturer technical manuals and EPD documents as referenced in Section~\ref{sec:database}.
 
 \input{decking_table}
+
 %===============================================================
 \subsection{Full-floor vibration check: worked example}
 \label{app:vibration}
 %===============================================================
-This appendix presents a complete bay-level vibration check for a representative office floor, following the full SCI~P354 method \citep{RefWorks:hicks2009p354}. It is included to demonstrate the full procedure that the slab-only screening check of Section~\ref{sec:vibration_method} approximates, and to quantify the extent to which the complete floor frequency --- with the slab supported on flexible beams --- falls below the slab-alone value. The calculation is implemented in \texttt{full\_vibration\_check.py}.
+This appendix presents a complete bay-level vibration check for a representative office floor, following the SCI~P354 simplified method \citep{RefWorks:hicks2009p354}. It is included to demonstrate the full procedure that the slab-only screening check of Section~\ref{sec:vibration_method} approximates, and to quantify the reduction in natural frequency when the slab is supported on flexible beams rather than rigid supports. The calculation is implemented in \texttt{full\_vibration\_check.py}.
 
 \subsubsection*{Bay geometry and inputs}
-The worked example uses a representative office bay. The inputs that the slab-only optimisation cannot define --- and which the full check requires --- are stated explicitly below.
-\todo[inline]{Populate from full\_vibration\_check.py for the chosen representative bay. Fill in: secondary beam span, primary beam span, bay width, secondary/primary beam sections, slab depth and deck, concrete grade, damping ratio $\zeta$, and the design walking parameters.}
+
+The worked example uses the minimum-GWP composite slab at a 6 metre two-span office span (ComFlor~60 0.9\,mm gauge, $h = 166 mm$, C25/30, propped construction), placed within a representative 6 metre~$\times$ 9 metre office bay. Secondary beams span 9m at 6m centres; primary beams also span 9m. Realistic composite beam sections are assumed, consistent with the applied loading.
 
 \begin{table}[h!]
 \small
@@ -33,34 +32,364 @@ The worked example uses a representative office bay. The inputs that the slab-on
 \toprule
 Parameter & Symbol & Value \\
 \midrule
-Secondary beam span        & $L_s$        & \todo{fill}\,m \\
-Primary beam span          & $L_p$        & \todo{fill}\,m \\
-Bay width                  & $w_\mathrm{bay}$ & \todo{fill}\,m \\
-Secondary beam section     & ---          & \todo{fill} \\
-Primary beam section       & ---          & \todo{fill} \\
-Slab depth / deck          & $h$          & \todo{fill}\,mm / \todo{fill} \\
-Concrete grade             & ---          & \todo{fill} \\
-Floor mass (perm.\ + $0.1Q_k$) & $m$      & \todo{fill}\,kg/m\textsuperscript{2} \\
-Damping ratio              & $\zeta$      & \todo{fill} (SCI~P354 Table~4.1) \\
+Slab span (secondary beam spacing) & $b$     & 6.0m \\
+Secondary beam span                & $L_y$   & 9.0m \\
+Primary beam span                  & $L_x$   & 9.0m \\
+Secondary beam bays                & $n_y$   & 4 \\
+Primary beam bays                  & $n_x$   & 4 \\
+Secondary beam section             & ---     & 457$\times$191$\times$67\,UB \\
+Primary beam section               & ---     & 533$\times$210$\times$82\,UB \\
+Slab depth / deck                  & $h$     & 166mm / ComFlor~60 \\
+Concrete grade                     & ---     & C25/30 \\
+Dynamic concrete modulus           & $E_{c,\mathrm{dyn}}$ & 38GPa (NWC, SCI~P354 \S4.1.3) \\
+Dynamic modular ratio              & $n$     & $210{,}000/38{,}000 = 5.53$ \\
+Floor mass (perm.\ $+ 0.1Q_k$)    & $m$     & $476kg/m^2$ \\
+Damping ratio                      & $\zeta$ & 0.03 (fitted office, SCI~P354 Table~4.1) \\
+Response factor limit              & $R_\mathrm{lim}$ & 8 (general office, SCI~P354 Table~5.3) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsubsection*{Step 1 --- Component frequencies}
-The natural frequency of each component (slab, secondary beam, primary beam) is computed from its self-weight deflection $\delta$ under the vibrating mass using $f = 18/\sqrt{\delta_\mathrm{mm}}$ (SCI~P354 Eq.~4).
-\todo[inline]{Report $\delta$ and $f$ for the slab, secondary beam, and primary beam. Note the slab value here should match the slab-only screening value of Section~\ref{sec:vibration_method} for the same span.}
-
-\subsubsection*{Step 2 --- Combined floor frequency}
-The component frequencies are combined using Dunkerley's approximation to give the fundamental frequency of the floor system:
+The floor mass per unit area is
 \begin{equation}
-    \frac{1}{f_0^2} = \frac{1}{f_\mathrm{slab}^2} + \frac{1}{f_\mathrm{sec}^2} + \frac{1}{f_\mathrm{prim}^2}
-    \label{eq:dunkerley}
+    m = \frac{\bigl(g_\mathrm{slab} + g_\mathrm{deck} + \mathrm{SDL} + 0.1\,Q_k\bigr) \times 10^3}{g}
+      = \frac{(3.22 + 0.10 + 1.11 + 0.25)\times 10^3}{9.81}
+      = 476kg/m^2
 \end{equation}
-\todo[inline]{Report the combined $f_0$ and compare it explicitly with the slab-alone frequency, stating the percentage reduction. This is the key quantitative point: the full-floor frequency is lower than the slab-alone screening value.}
+where $g_\mathrm{slab} = 24 \times h_\mathrm{conc,avg}/1000 = 24 \times 134/1000 = 3.22 kN/m^2$ uses the profiled average concrete depth $h_\mathrm{conc,avg} = (h - h_p) + V_\mathrm{trough}{\times}1000 = 106 + 28 = 134mm$.
+
+\subsubsection*{Step 1 --- Component stiffnesses and deflections}
+
+\paragraph{Slab stiffness.}
+The dynamic second moment of area per unit width is obtained from the SCI~P354 Table~7.2 power-law fit for a trapezoidal deck with $h_p = 60mm$:
+\begin{equation}
+    I_s = 0.23\,h^{3.7} = 0.23 \times 166^{3.7} = 37.7 \times 10^6 mm^4/m
+\end{equation}
+\begin{equation}
+    EI_s = E_s\,I_s = 210{,}000 \times 37.7 \times 10^6 = 7.91\ MN/m^2/m
+\end{equation}
+
+\paragraph{Composite beam stiffnesses.}
+Using the transformed-section method (SCI~P354 \S4.1.4) with effective slab widths $b_\mathrm{eff} = \min(L/4,\,b)$:
+\begin{align}
+    b_{\mathrm{eff},s} &= \min(9.0/4,\;6.0) = 2.25m \quad \text{(secondary beam)} \\
+    b_{\mathrm{eff},p} &= \min(9.0/4,\;9.0) = 2.25m \quad \text{(primary beam)}
+\end{align}
+The resulting composite stiffnesses are:
+\begin{align}
+    EI_b &= 243 MN/m^2 \quad \text{(secondary, 457$\times$191$\times$67\,UB composite)} \\
+    EI_p &= 359 MN/m^2 \quad \text{(primary, 533$\times$210$\times$82\,UB composite)}
+\end{align}
+
+\paragraph{Component deflections.}
+The natural frequency of each component is derived from its static deflection under the vibrating mass $m$ using $f = 18/\sqrt{\delta_\mathrm{mm}}$ (SCI~P354 Eq.~4). The secondary beam mode deflection (Table~7.1) combines the bending of the secondary beam and the local slab flexibility:
+\begin{equation}
+    \delta_\mathrm{sec} = \frac{m\,g\,b}{384}
+        \left(\frac{5\,L_y^4}{EI_b} + \frac{b^3}{EI_s}\right)
+    = \frac{476 \times 9.81 \times 6.0}{384}
+        \left(\frac{5 \times 9.0^4}{243 \times 10^6} + \frac{6.0^3}{7.91 \times 10^6}\right)
+    = 11.84 mm
+\end{equation}
+The primary beam mode deflection (simply-supported beam, UDL $= m\,g\,L_y$):
+\begin{equation}
+    \delta_\mathrm{prim} = \frac{5\,m\,g\,L_y\,L_x^4}{384\,EI_p}
+    = \frac{5 \times 476 \times 9.81 \times 9.0 \times 9.0^4}{384 \times 359 \times 10^6}
+    = 10.02mm
+\end{equation}
+The corresponding component frequencies are:
+\begin{align}
+    f_\mathrm{slab} &= \frac{18}{\sqrt{9.96}} = 5.70Hz \\
+    f_\mathrm{sec}  &= \frac{18}{\sqrt{11.84}} =5.23Hz \\
+    f_\mathrm{prim} &= \frac{18}{\sqrt{10.02}} =5.69Hz
+\end{align}
+Note that $f_\mathrm{slab} = 5.70Hz$ matches the slab-only screening value for the same section and span (Section~\ref{sec:vibration_method}), confirming consistency between the two calculations.
+
+\subsubsection*{Step 2 --- Fundamental floor frequency}
+
+Per SCI~P354 \S7, the governing deflection mode is the larger of the two beam modes:
+\begin{equation}
+    \delta_0 = \max(\delta_\mathrm{sec},\,\delta_\mathrm{prim}) = \max(11.84,\;10.02) = 11.84mm
+    \quad \text{(secondary beam governs)}
+\end{equation}
+The fundamental frequency of the combined floor system is therefore:
+\begin{equation}
+    f_0 = \frac{18}{\sqrt{\delta_0}} = \frac{18}{\sqrt{11.84}} = 5.23Hz
+\end{equation}
+This is 8.3\% below the slab-alone screening frequency of 5.70Hz, confirming that the slab-only check provides a conservative upper bound on the floor frequency. Since $f_0 \geq 3Hz$, the floor is not susceptible to resonance with the third harmonic of walking and the full response-factor check proceeds.
 
 \subsubsection*{Step 3 --- Modal mass and response factor}
-The floor is classified as low- or high-frequency from $f_0$, the effective modal mass mobilised by walking is estimated, and the root-mean-square acceleration response is computed and expressed as a response factor $R$ relative to the BS~6472 base curve.
-\todo[inline]{Report: classification (low/high frequency), modal mass, RMS acceleration $a_\mathrm{rms}$, and the resulting response factor $R$. State the acceptance limit used (e.g.\ $R \le 8$ for general offices, SCI~P354) and whether the bay passes.}
 
-\subsubsection*{Discussion of the example}
-\todo[inline]{Close with 2--3 sentences: (1) whether the representative bay passes the full check; (2) how far the full-floor frequency sits below the slab-alone screening value, confirming the screening check is conservative-but-necessary as described in Section~\ref{sec:vibration_method}; (3) the implication for the optimisation results --- i.e.\ that at long office spans the full check would likely require a deeper section than the optimisation selects, as discussed in Section~\ref{sec:assumptions}.}
+Since $5 < f_0 \leq 6Hz$, the $\eta$ factor interpolated from SCI~P354 Table~7.3 is:
+\begin{equation}
+    \eta = 0.21\,f_0 - 0.55 = 0.21 \times 5.23 - 0.55 = 0.549
+\end{equation}
+
+The effective floor length $L_\mathrm{eff}$ and width $S$ mobilised by the mode (SCI~P354 Eqs.~45--46, with $n_{y,\mathrm{eff}} = n_{x,\mathrm{eff}} = 4$):
+\begin{align}
+    L_\mathrm{eff} &= 1.09 \times 1.10^{(n_y-1)/2}
+        \left(\frac{EI_b}{m\,b\,f_0^2}\right)^{0.25} L_y
+    = 1.09 \times 1.10^{1.5} \times 7.47 \times 9.0 = 84.6m
+    \;\to\; \min(84.6,\;4 \times 9) = 36.0m \\
+    S &= \eta \times 1.15^{(n_x-1)/2}
+        \left(\frac{EI_s}{m\,f_0^2}\right)^{0.25}
+    = 0.549 \times 1.15^{1.5} \times 4.97 = 3.36m
+\end{align}
+The modal mass is:
+\begin{equation}
+    M = m\,L_\mathrm{eff}\,S = 476 \times 36.0 \times 3.36 = 57600kg
+\end{equation}
+
+The resonance build-up factor (SCI~P354 Eq.~37, walking pace $f_p = 2.0Hz$, speed $v_w = 1.5m/s$, path $L_p = L_y = 9.0m$):
+\begin{equation}
+    \rho = 1 - \exp\!\left(-\frac{2\pi\,\zeta\,f_p\,L_p}{v_w}\right)
+         = 1 - \exp\!\left(-\frac{2\pi \times 0.03 \times 2.0 \times 9.0}{1.5}\right)
+         = 1 - e^{-2.26} = 0.896
+\end{equation}
+
+Since $f_0 = 5.23Hz \leq 8Hz$, the frequency weighting factor is $W = 1.0$ (flat region of the BS~6472 $W_g$ curve). The floor is classified as low-frequency ($f_0 < 10Hz$) and the RMS acceleration response is computed from SCI~P354 Eq.~50:
+\begin{equation}
+    a_\mathrm{rms} = \frac{0.1\,Q\,\rho\,W}{\sqrt{2}\,\zeta\,M}
+    = \frac{0.1 \times 746 \times 0.896 \times 1.0}{\sqrt{2} \times 0.03 \times 57{,}600}
+    = 0.0274m/s^2
+\end{equation}
+where $Q = 746N$ is the representative pedestrian force (76\,kg). The response factor relative to the BS~6472 base curve ($0.005m/s^2$) is:
+\begin{equation}
+    R = \frac{a_\mathrm{rms}}{0.005} = \frac{0.0274}{0.005} = 5.47
+\end{equation}
+
+\subsubsection*{Result}
+
+\begin{equation}
+    R = 5.47 \;\leq\; R_\mathrm{lim} = 8.0 \qquad \Rightarrow \qquad
+    \text{utilisation} = \frac{5.47}{8.0} = 0.684 \quad \textbf{PASS}
+\end{equation}
+
+\subsubsection*{Discussion}
+
+The representative office bay passes the full SCI~P354 response-factor check with a utilisation of 0.68. The combined floor frequency of 5.23Hz is 8.3\% below the slab-alone screening value of 5.70Hz, confirming that the slab-only check is conservative and that the full floor frequency falls below the screened value when realistic beam flexibility is accounted for. The reduction is modest here because the secondary and primary beam deflections (11.84mm and 10.02mm) are of similar magnitude to the slab-alone deflection (9.96mm); a more slender beam arrangement would produce a larger reduction. This confirms that the slab-only screening check used in the optimisation is a necessary but not sufficient condition: any section passing the screening check warrants a full bay-level check at the detailed design stage, particularly at longer spans where beam flexibility becomes more significant relative to slab stiffness.
+
+%===============================================================
+\subsection{End anchorage comparison}
+\label{app:end_anchorage}
+%===============================================================
+As stated in Section~\ref{sec:assumptions}, end anchorage by through-deck welded headed studs is omitted from the longitudinal shear resistance throughout this study, because its benefit can only be credited for decks characterised by the partial connection ($\tau_{u,Rk}$) method and not for those characterised solely by the m--k constants, and crediting it selectively would introduce an inconsistent basis of comparison. This appendix quantifies the resistance forgone by that choice, so that the magnitude of the omitted contribution is transparent. The calculation is implemented in \texttt{end\_anchorage\_comparison.py}.
+
+\subsubsection*{Method}
+The end anchorage resistance of a single through-deck welded stud is taken as the lesser of the bearing resistance of the deck rib (EN~1994-1-1 Cl.\,9.7.4 Eq.\,9.10) and the shear resistance of the stud itself (EN~1994-1-1 Cl.\,6.6.3.1):
+\begin{equation}
+    P_{pb,Rd} = \min\!\left( P_{bear},\; P_{stud} \right)
+    \label{eq:anchorage_min}
+\end{equation}
+with the bearing resistance
+\begin{equation}
+    P_{bear} = k_\varphi\, d_{do}\, t\, f_{yp,d}, \qquad
+    k_\varphi = 1 + \frac{a}{d_{do}} \le 6.0, \qquad
+    d_{do} = 1.1\, d_{shank}
+    \label{eq:anchorage_bear}
+\end{equation}
+where $a$ is the distance from the centre of the stud to the end of the sheeting and $d_{shank}$ the stud shank diameter. With one stud per rib, the anchorage force per unit width is $N_a = (1000/l_1)\,P_{pb,Rd}$, where $l_1$ is the rib spacing. This force is added to the embossment-and-friction shear bond $N_{c,\mathrm{bond}}$ to give the enhanced longitudinal force $N_c = \min(N_{c,\mathrm{bond}} + N_a,\, N_{cf})$, which is substituted into the partial connection moment resistance of Equation~\eqref{eq:partial_mrd}.
+
+\subsubsection*{Part~1 --- Moment capacity increase from end anchorage}
+
+Representative slab depth: $h_c = 75$\,mm above the deck, C25/30 concrete. Spans evaluated: 2.0--6.0\,m. Results cover 183 partially-connected deck$\,\times\,$span combinations.
+
+\begin{table}[h!]
+\centering\small
+\caption{Percentage increase in composite moment resistance $M_\mathrm{Rd}$ relative to embossment-only shear bond.}
+\label{tab:ea_summary}
+\begin{tabular}{lccc}
+\toprule
+Approach & Min\,(\%) & Max\,(\%) & Mean\,(\%) \\
+\midrule
+End anchorage, $k_\phi = 2.5$ (min, $a = 1.5\,d_{do}$) & 0.2 & 99.6 & 27.3 \\
+End anchorage, $k_\phi = 6.0$ (max) & 0.2 & 182.0 & 40.2 \\
+Full shear connection (upper bound) & 0.2 & 182.0 & 40.4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Part~2 --- Case study: Cofrastra 60, C25/30, $L = 4$\,m}
+
+This example uses a Cofrastra 60 deck (representative gauge: $t = 0.9$\,mm, $h_p = 60$\,mm, $A_{pe} = 1067$\,mm\textsuperscript{2}/m, $f_{ypd} = 350$\,N/mm\textsuperscript{2}, $\tau_{u,Rk} = 0.10$\,N/mm\textsuperscript{2}, rib spacing $l_1 = 101$\,mm) at $L = 4$\,m simply-supported, $h = 135$\,mm, C25/30 ($f_{cd} = 16.67$\,MPa).
+
+\paragraph{Shear span and bond force.}
+The shear span is $L_x = L/2 = 2.00$\,m. The embossment bond force per unit width is
+\begin{equation}
+    N_{c,\mathrm{bond}} = \frac{\tau_{u,Rk}}{\gamma_{vs}}\,b\,L_x
+    = \frac{0.10}{1.25}\times 1000\times2000
+    = 160.0\text{\,kN/m}
+\end{equation}
+giving a degree of connection $\eta = 0.428$ (full connection: $N_{cf} = 373$\,kN/m).
+
+\paragraph{End-anchorage resistance (Eq~9.10).}
+For a \o\,19\,mm stud: $d_{do} = 1.1\times19 = 20.9$\,mm, $k_\phi = 1 + 40/20.9 = 2.91$.
+\begin{align}
+    P_{pb,Rd} &= k_\phi\,d_{do}\,t\,f_{ypd} = 2.91\times20.9\times0.9\times350 = 18757\text{\,N/stud} \\
+    N_a &= \frac{1000}{101}\times18757 = 185.7\text{\,kN/m}
+\end{align}
+
+\paragraph{Design moment and resistance.}
+The ULS design moment is $M_{Ed} = 21.10$\,kNm/m. The partial-connection resistance without and with end anchorage:
+\begin{align}
+    M_{Rd,emb}  &= 18.61\text{\,kNm/m}\quad\Rightarrow\quad \eta_{util} = 1.134\quad \textbf{(FAIL)} \\
+    M_{Rd,stud} &= 31.15\text{\,kNm/m}\quad\Rightarrow\quad \eta_{util} = 0.677\quad \textbf{(PASS)} 
+\end{align}
+End anchorage increases $M_{Rd}$ by 67.4\,\% at a GWP cost of 5.93\,kg\,CO\textsubscript{2}e/m\textsuperscript{2} (3.25\,kg\,steel/m\textsuperscript{2}).
+
+
+\subsubsection*{Discussion}
+Across the 183 partially-connected deck--span combinations, end anchorage increases the composite moment resistance by a mean of 27.3\,\% at the minimum bearing factor ($k_\varphi = 2.5$) and 40.2\,\% at the maximum ($k_\varphi = 6.0$), with the largest gains at short spans where the embossment bond mobilises only a small fraction of the full-connection force. In practical terms, however, end anchorage changes the longitudinal shear feasibility outcome for only three deck families and only at a single span each: Cofraplus~60 and Cofrastra~60 at 4m, and Cofrastra~70 at 5m). At every other span the shear bond is either already sufficient without studs or insufficient even with them, so end anchorage would not extend the feasible span range.
+
+Section~\ref{sec:assumptions}---that end anchorage cannot be credited for m--k decks and so cannot be applied uniformly across the database---this confirms that omitting end anchorage is the appropriate choice: it affects only a handful of marginal sections, the alternative (crediting studs) carries a material GWP penalty rather than a saving, and longitudinal shear in any case rarely governs the optimal sections (Section~\ref{sec:res_gov_office}).
+
+%===============================================================
+%===============================================================
+\subsection{Supplementary optimisation figures}
+\label{app:results_figures}
+%===============================================================
+This appendix reproduces the envelope (all checks combined) optimisation results not shown in the main text (Section~\ref{fourthchapter}). For each occupancy scenario, GWP, slab depth, and mass are plotted against span for the single--, two--, and three--span configurations, followed by the composite GWP breakdown for each configuration. As noted in Section~\ref{sec:res_intro}, only the composite and RC flat systems are analysed as continuous members; the RC ribbed and timber curves in the two-- and three--span plots are single--span reference baselines. The composite slab is infeasible for the industrial two--span configuration, so no composite curve appears in that breakdown.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/office/ENV/plot_office_2span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/office/ENV/plot_office_2span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/office/ENV/plot_office_2span_ENV_mass.png}
+\caption{Office, two--span continuous: GWP, slab depth, and mass versus span.}
+\label{fig:app_office_ENV_2span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/office/ENV/plot_office_3span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/office/ENV/plot_office_3span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/office/ENV/plot_office_3span_ENV_mass.png}
+\caption{Office, three--span continuous: GWP, slab depth, and mass versus span.}
+\label{fig:app_office_ENV_3span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.49\textwidth]{figures/office/GWP breakdown/results_office_2span_ENV_gwp_comp_struct.png}\hfill
+\includegraphics[width=0.49\textwidth]{figures/office/GWP breakdown/results_office_3span_ENV_gwp_comp_struct.png}
+\caption{Office composite GWP breakdown: two--span and three--span.}
+\label{fig:app_office_bd_0}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_1span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_1span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_1span_ENV_mass.png}
+\caption{Residential, single span: GWP, slab depth, and mass versus span.}
+\label{fig:app_residential_ENV_1span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_2span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_2span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_2span_ENV_mass.png}
+\caption{Residential, two--span continuous: GWP, slab depth, and mass versus span.}
+\label{fig:app_residential_ENV_2span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_3span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_3span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/residential/ENV/plot_residential_3span_ENV_mass.png}
+\caption{Residential, three--span continuous: GWP, slab depth, and mass versus span.}
+\label{fig:app_residential_ENV_3span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.49\textwidth]{figures/residential/GWP breakdown/results_residential_ENV_gwp_comp_struct.png}\hfill
+\includegraphics[width=0.49\textwidth]{figures/residential/GWP breakdown/results_residential_2span_ENV_gwp_comp_struct.png}
+\caption{Residential composite GWP breakdown: single span and two--span.}
+\label{fig:app_residential_bd_0}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/residential/GWP breakdown/results_residential_3span_ENV_gwp_comp_struct.png}
+\caption{Residential composite GWP breakdown: three--span.}
+\label{fig:app_residential_bd_1}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_1span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_1span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_1span_ENV_mass.png}
+\caption{Retail, single span: GWP, slab depth, and mass versus span.}
+\label{fig:app_retail_ENV_1span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_2span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_2span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_2span_ENV_mass.png}
+\caption{Retail, two--span continuous: GWP, slab depth, and mass versus span.}
+\label{fig:app_retail_ENV_2span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_3span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_3span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/retail/ENV/plot_retail_3span_ENV_mass.png}
+\caption{Retail, three--span continuous: GWP, slab depth, and mass versus span.}
+\label{fig:app_retail_ENV_3span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.49\textwidth]{figures/retail/GWP breakdown/results_retail_ENV_gwp_comp_struct.png}\hfill
+\includegraphics[width=0.49\textwidth]{figures/retail/GWP breakdown/results_retail_2span_ENV_gwp_comp_struct.png}
+\caption{Retail composite GWP breakdown: single span and two--span.}
+\label{fig:app_retail_bd_0}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/retail/GWP breakdown/results_retail_3span_ENV_gwp_comp_struct.png}
+\caption{Retail composite GWP breakdown: three--span.}
+\label{fig:app_retail_bd_1}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_1span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_1span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_1span_ENV_mass.png}
+\caption{Industrial, single span: GWP, slab depth, and mass versus span.}
+\label{fig:app_industrial_ENV_1span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_2span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_2span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_2span_ENV_mass.png}
+\caption{Industrial, two--span continuous: GWP, slab depth, and mass versus span.}
+\label{fig:app_industrial_ENV_2span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_3span_ENV_gwp.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_3span_ENV_height.png}\hfill
+\includegraphics[width=0.32\textwidth]{figures/industrial/ENV/plot_industrial_3span_ENV_mass.png}
+\caption{Industrial, three--span continuous: GWP, slab depth, and mass versus span.}
+\label{fig:app_industrial_ENV_3span}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.49\textwidth]{figures/industrial/GWP breakdown/results_industrial_ENV_gwp_comp_struct.png}\hfill
+\includegraphics[width=0.49\textwidth]{figures/industrial/GWP breakdown/results_industrial_3span_ENV_gwp_comp_struct.png}
+\caption{Industrial composite GWP breakdown: single span and three--span.}
+\label{fig:app_industrial_bd_0}
+\end{figure}
