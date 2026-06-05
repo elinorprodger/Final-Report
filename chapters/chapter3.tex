@@ -24,11 +24,11 @@ The implementation in this study introduces a new \texttt{CompositeSlab} class w
 The optimisation draws on the SQLite database described above. Of the four tables, the \texttt{sheeting\_prop} table is introduced as part of this study; the other three are inherited from the pre-existing framework with additional entries added to support composite slab design. The structure and contents of each table are described below.
 
 \subsubsection*{Decking products (\texttt{sheeting\_prop})}
-The decking table contains product-specific mechanical properties required for structural verification: rib geometry parameters $h_p$ (rib height), $l_1$ (rib pitch), $l_2$ (lower flange width), $l_3$ (upper flange width), sheet thickness $t$, web inclination $\theta$, and per-metre cross-sectional area $A_p$ and effective area $A_{p,e}$; section properties $e$ (centroidal axis from soffit), $e_p$ (effective centroidal axis), $I_p$ (second moment of area), $W_{pl}$ (plastic modulus), $W_{el,f}$ (effective elastic modulus); resistance values $M_{c,Rd}$ (sagging moment resistance), $M_{t,Rd}$ (hogging moment resistance, where available), and $f_{ypd}$ (design yield strength). Longitudinal shear parameters are stored where available, in one of two formats depending on the characterisation method adopted by the manufacturer: the m--k constants $(m_p, k_p)$ or the characteristic shear bond strength $\tau_{u,Rk}$ from EN~1994-1-1 Cl.\,9.7.3.
+The decking table contains product-specific mechanical properties required for structural verification: rib geometry parameters $h_p$ (rib height), $l_1$ (rib pitch), $l_2$ (lower flange width), $l_3$ (upper flange width), sheet thickness $t$, web inclination $\theta$, and per-metre cross-sectional area $A_p$ and effective area $A_{p,e}$; section properties $e$ (centroidal axis from soffit), $e_p$ (effective centroidal axis), $I_p$ (second moment of area), $W_{pl}$ (plastic modulus), $W_{el,f}$ (effective elastic modulus); resistance values $M_{c,Rd}$ (sagging moment resistance), $M_{t,Rd}$ (hogging moment resistance, where available), and $f_{ypd}$ (design yield strength). Longitudinal shear parameters are stored where available, in one of two formats depending on the characterisation method adopted by the manufacturer: the m--k constants $(m_p, k_p)$ or the characteristic shear bond strength $\tau_{u,Rk}$ from 4-1-1/9.7.3.
 
 The volume of concrete that fills the trough voids is stored as the parameter $V_\mathrm{tr}$ (in m$^3$/m$^2$), derived from the manufacturer-declared concrete volume per square metre and used in the GWP and self-weight calculations as described in Section~\ref{sec:env_impact}.
 
-Environmental data are stored as a GWP value accompanied by a unit descriptor (\texttt{GWP\_UNIT}), since manufacturer EPDs express results in differing functional units---per unit area (kg\,CO$_2$-eq/m$^2$) or per unit mass (kg\,CO$_2$-eq/t)---and normalisation to a consistent per-metre-length basis is applied within the model.
+Environmental data are stored as a GWP value accompanied by a unit descriptor (\texttt{GWP\_UNIT}), since manufacturer EPDs express results in differing functional units---per unit area (kg\,CO$_2$eq/m$^2$) or per unit mass (kg\,CO$_2$eq/t)---and normalisation to a consistent per-metre-length basis is applied within the model.
 
 Deck products currently included in the database are drawn from the ComFlor range produced by Tata Steel, the Cofraplus and Cofradal ranges from ArcelorMittal, and the Multideck range from Kingspan. These manufacturers were selected on the basis of EPD and property availability, coverage of both shallow ($h_p \le 80$\,mm) and deep ($h_p \ge 200$\,mm) decking profiles, and suitability for the span range under investigation, as discussed in Section~\ref{sec:commercial_slim_floor}.
 
@@ -134,7 +134,7 @@ The slab is evaluated as a one-way spanning system across spans of 3--10\,m in 1
     \item Two-span continuous
     \item Three-span continuous
 \end{itemize}
-Multi-span configurations use equal spans throughout; the influence of unequal spans is not investigated. All structural verification and optimisation is carried out on a per-metre-width basis, allowing results to be expressed as GWP per metre of span length in kg\,CO$_2$-eq/m.
+Multi-span configurations use equal spans throughout; the influence of unequal spans is not investigated. All structural verification and optimisation is carried out on a per-metre-width basis, allowing results to be expressed as GWP per metre of span length in kg\,CO$_2$eq/m.
 
 %===============================================================
 \subsection{Design variables and parameters}
@@ -180,8 +180,8 @@ Table~\ref{tab:design_parameters} summarises the design parameters held constant
 \hline
 \multicolumn{4}{l}{\textit{Construction-stage Loads}} \\
 \hline
-Construction stage UDL          & $Q_{k,1b}$        & 0.75 kN/m²         & EN 1991-1-6 Cl.\,4.11.2 \\
-Construction stage patch load   & $Q_{k,1b,\mathrm{patch}}$ & 1.5 kN/m² over 3$\times$3 m & EN 1991-1-6 Cl.\,4.11.2 \\
+Construction stage UDL          & $Q_{k,1b}$        & 0.75 kN/m²         & 1-1-6/4.11.2 \\
+Construction stage patch load   & $Q_{k,1b,\mathrm{patch}}$ & 1.5 kN/m² over 3$\times$3 m & 1-1-6/4.11.2 \\
 \hline
 \multicolumn{4}{l}{\textit{Partial Factors}} \\
 \hline
@@ -190,26 +190,26 @@ Variable loads                  & $\gamma_Q$        & 1.50               & EN 19
 Concrete                        & $\gamma_C$        & 1.50               & EN 1992-1-1 \\
 Reinforcement                   & $\gamma_S$        & 1.15               & EN 1992-1-1 \\
 Steel section                   & $\gamma_{M0}$     & 1.00               & EN 1993-1-1 \\
-Longitudinal shear              & $\gamma_{VS}$     & 1.25               & EN 1994-1-1 Cl.\,9.7.3 \\
+Longitudinal shear              & $\gamma_{VS}$     & 1.25               & 4-1-1/9.7.3 \\
 \hline
 \multicolumn{4}{l}{\textit{Serviceability Limits}} \\
 \hline
-Construction stage deflection   & $\delta_\mathrm{constr}$  & $\min(L/180, 20\,\mathrm{mm})$ or $\min(L/130, 30\,\mathrm{mm})$    & EN 1994-1-1 Cl.\,9.3.2; UK NA \\
+Construction stage deflection   & $\delta_\mathrm{constr}$  & $\min(L/180, 20\,\mathrm{mm})$ or $\min(L/130, 30\,\mathrm{mm})$    & 4-1-1/9.3.2; UK NA \\
 Composite stage --- total       & $\delta_\mathrm{tot}$     & $L/300$                            & SIA 263$^{\ddagger}$ \\
-Composite stage --- variable    & $\delta_\mathrm{var}$     & $\min(L/350, 20\,\mathrm{mm})$    & EN 1994-1-1 Cl.\,9.8.2(4) \\
+Composite stage --- variable    & $\delta_\mathrm{var}$     & $\min(L/350, 20\,\mathrm{mm})$    & 4-1-1/9.8.2(4) \\
 \hline
 \multicolumn{4}{l}{\textit{Cross-section Constraints}} \\
 \hline
-Minimum concrete cover above deck & ---             & 50\,mm                            & EN 1994-1-1 Cl.\,9.2.1 \\
-Minimum total depth              & ---             & $h_p + 50$\,mm; not less than 90\,mm & EN 1994-1-1 Cl.\,9.2.1 \\
-Concrete cover to top mesh       & $c_\mathrm{nom}$ & 20\,mm                            & EN 1992-1-1 Cl.\,4.4 \\
+Minimum concrete cover above deck & ---             & 50\,mm                            & 4-1-1/9.2.1 \\
+Minimum total depth              & ---             & $h_p + 50$\,mm; not less than 90\,mm & 4-1-1/9.2.1 \\
+Concrete cover to top mesh       & $c_\mathrm{nom}$ & 20\,mm                            & 2-1-1/4.4 \\
 \hline
 \multicolumn{4}{l}{\textit{Material Properties}} \\
 \hline
 Effective deck area (where not stated) & $A_{p,e}$ & $0.9\,A_p$ (shallow); $0.5\,A_p$ (deep, $h_p \ge 80$\,mm) & $^{\dagger}$ \\
-Creep coefficient                & $\varphi_t$    & EN 1992-1-1 Annex B & EN 1992-1-1 Cl.\,5.4.2.2 \\
-Modular ratio (short-term)       & $n_0$          & $E_a / E_{cm}$ & EN 1994-1-1 Cl.\,5.4.2.2 \\
-Modular ratio (long-term)        & $n_L$          & $n_0(1 + 1.1\varphi_t)$ & EN 1994-1-1 Cl.\,5.4.2.2 \\
+Creep coefficient                & $\varphi_t$    & EN 1992-1-1 Annex B & 2-1-1/5.4.2.2 \\
+Modular ratio (short-term)       & $n_0$          & $E_a / E_{cm}$ & 4-1-1/5.4.2.2 \\
+Modular ratio (long-term)        & $n_L$          & $n_0(1 + 1.1\varphi_t)$ & 4-1-1/5.4.2.2 \\
 Cement class                     & ---            & N (normal)              & EN 1992-1-1 \\
 Relative humidity                & RH             & 50\% (interior)         & EN 1992-1-1 Annex B \\
 Loading age                      & $t_0$          & 28 days                 & SCI P359 Cl.\,6.3 \\
@@ -223,12 +223,12 @@ Trough bar diameter set          & $\varnothing_\mathrm{tr}$ & $\{8, 10, 12, 16,
 \multicolumn{4}{l}{\textit{Environmental Assessment}} \\
 \hline
 LCA system boundary              & ---            & A1--A3 and C1--C4              & EN 15804 \\
-Functional unit                  & ---            & kg\,CO$_2$-eq/m of span length & --- \\
+Functional unit                  & ---            & kg\,CO$_2$eq/m of span length & --- \\
 \hline
 \end{tabular}
 \vspace{4pt}\\
 {\footnotesize
-$^{\ddagger}$ EN~1994-1-1 Cl.\,9.8.2(4) recommends a total deflection limit of $L/250$; the more conservative limit of $L/300$ is adopted here in accordance with SIA~263 \citep{RefWorks:sia263}, for consistency with the prior framework against which the composite results are compared.\\
+$^{\ddagger}$ 4-1-1/9.8.2(4) recommends a total deflection limit of $L/250$; the more conservative limit of $L/300$ is adopted here in accordance with SIA~263 \citep{RefWorks:sia263}, for consistency with the prior framework against which the composite results are compared.\\
 $^{\dagger}$ Conservative fallback: $A_{p,e} = 0.9\,A_p$ for shallow profiles ($h_p < 80$\,mm); $A_{p,e} = 0.5\,A_p$ for deep profiles ($h_p \ge 80$\,mm). Where the manufacturer publishes $A_{p,e}$ explicitly it is used directly.
 }
 \end{table}
@@ -248,14 +248,14 @@ Structural verification follows the staged nature of composite construction, dis
 \toprule
 \textbf{Stage} & \textbf{Check} & \textbf{Reference} \\
 \midrule
-Construction & ULS bending (sagging) & EN 1993-1-3 Cl.\,5.4.3, EN 1994-1-1 Cl.\,9.3 \\
-Construction & ULS web shear buckling      & EN 1993-1-3 Cl.\,6.1.5 \\
-Construction & SLS deflection              & EN 1994-1-1 Cl.\,9.3.2; UK NA \\
-Composite    & ULS sagging moment          & EN 1994-1-1 Cl.\,9.7.2 \\
-Composite    & ULS longitudinal shear      & EN 1994-1-1 Cl.\,9.7.3 (m--k) or 9.7.5 ($\tau_u$) \\
-Composite    & ULS vertical shear          & EN 1994-1-1 Cl.\,9.7.5; EN 1992-1-1 Cl.\,6.2.2 (2004)\\
-Composite    & ULS hogging (cont.\ spans)  & EN 1994-1-1 Cl.\,9.7.3(2)P, 9.4.2(3) \\
-Composite    & SLS deflection (total \& variable) & SIA 263; EN 1994-1-1 Cl.\,9.8.2(4) \\
+Construction & ULS bending (sagging) & 3-1-3/5.4.3, 4-1-1/9.3 \\
+Construction & ULS web shear buckling      & 3-1-3/6.1.5 \\
+Construction & SLS deflection              & 4-1-1/9.3.2; UK NA \\
+Composite    & ULS sagging moment          & 4-1-1/9.7.2 \\
+Composite    & ULS longitudinal shear      & 4-1-1/9.7.3 (m--k) or 9.7.5 ($\tau_u$) \\
+Composite    & ULS vertical shear          & 4-1-1/9.7.5; 2-1-1/6.2.2 (2004)\\
+Composite    & ULS hogging (cont.\ spans)  & 4-1-1/9.7.3(2)P, 9.4.2(3) \\
+Composite    & SLS deflection (total \& variable) & SIA 263; 4-1-1/9.8.2(4) \\
 Fire         & D1: thermal insulation      & EN 1994-1-2 Annex D, formula D.1 \\
 Fire         & D2: sagging moment $M_\mathrm{Rd,fi}$ & EN 1994-1-2 Annex D, formulae D.4--D.5 \\
 Fire         & D3: hogging $M_\mathrm{Rd,fi}$ (cont.) & EN 1994-1-2 Annex D, formulae D.7--D.11 \\
@@ -267,7 +267,7 @@ Fire         & D5: field of application    & EN 1994-1-2 Annex D, Table D.7 \\
 
 \subsubsection*{Construction stage}
 \label{sec:constr_stage}
-During unpropped construction the profiled steel deck acts as temporary formwork and must resist the self-weight of the wet concrete, its own self-weight, and the construction imposed loads over the full distance between permanent supports. When propped construction is specified, a single temporary prop is assumed at midspan during casting, dividing each span into two simply-supported $L/2$ sub-spans. The deck still carries the full wet-concrete and construction loads, but over the reduced sub-span $L/2$; the construction-stage checks are therefore not omitted but are evaluated against the $L/2$ sub-span using simply-supported coefficients. Because the propped sub-spans are simply supported, no hogging develops at the permanent internal supports during casting, so the construction-stage hogging and internal-support checks are suppressed for the propped case. The reduced effective span is what makes propped construction feasible at longer spans, where the bare deck could not span the full distance unpropped.
+During unpropped construction the profiled steel deck acts as temporary formwork and must resist the self-weight of the wet concrete, its own self-weight, and the construction imposed loads over the full distance between permanent supports. When propped construction is specified, a single temporary prop is assumed at midspan of each span during casting (one prop per span), dividing each span into two simply-supported $L/2$ sub-spans. The deck still carries the full wet-concrete and construction loads, but over the reduced sub-span $L/2$; the construction-stage checks are therefore not omitted but are evaluated against the $L/2$ sub-span using simply-supported coefficients. Because the propped sub-spans are simply supported, no hogging develops at the permanent internal supports during casting, so the construction-stage hogging and internal-support checks are suppressed for the propped case. The reduced effective span is what makes propped construction feasible at longer spans, where the bare deck could not span the full distance unpropped.
 
 \paragraph{ULS bending.} The construction-stage load model is shown in Figure~\ref{fig:constr_load_model}. The deck is verified against the maximum sagging moment $M_{Ed,sag}$, computed as the more onerous of two construction load cases:
 \begin{align}
@@ -280,7 +280,7 @@ where $w_\mathrm{ULS,1} = \gamma_G G_{k,1a} + \gamma_Q (Q_{k,1a} + Q_{k,1b} + Q_
 
 The sagging check is $M_{Ed,sag} \le M_{c,Rd}$, where $M_{c,Rd}$ is the manufacturer-published characteristic sagging moment resistance of the deck. Because the deck is treated as simply supported during casting, no construction-stage hogging check or moment redistribution is performed; the hogging resistance $M_{t,Rd}$ is used only for the composite-stage and fire hogging checks at internal supports (Sections~\ref{sec:hogging} and~\ref{sec:fire}).
 
-\paragraph{ULS shear (web buckling).} Web shear buckling resistance per web is computed in accordance with EN~1993-1-3 Cl.\,6.1.5:
+\paragraph{ULS shear (web buckling).} Web shear buckling resistance per web is computed in accordance with 3-1-3/6.1.5:
 \begin{equation}
     V_{b,Rd,\mathrm{web}} = \frac{h_w \cdot t \cdot f_{bv}}{\sin\theta \cdot \gamma_{M0}}
     \label{eq:web_shear}
@@ -297,7 +297,7 @@ where $h_w = h_p - t$ is the web height, $\theta$ is the web inclination, and $f
 \end{equation}
 The total resistance is $V_{b,Rd} = N_w \cdot V_{b,Rd,\mathrm{web}}$, where $N_w$ is the number of webs per metre width, taken from the database. The design shear force is the more onerous of the two load-case resultants evaluated at the support.
 
-\paragraph{SLS deflection.} The construction-stage SLS deflection check uses the initial elastic deflection of the bare deck under self-weight $G_{k,1a}$ and wet concrete weight $Q_{k,1c}$ only; construction live loads are excluded per EN~1994-1-1 Cl.\,9.3.2(2):
+\paragraph{SLS deflection.} The construction-stage SLS deflection check uses the initial elastic deflection of the bare deck under self-weight $G_{k,1a}$ and wet concrete weight $Q_{k,1c}$ only; construction live loads are excluded per 4-1-1/9.3.2(2):
 \begin{equation}
     \delta_\mathrm{initial} = K_\delta \cdot \frac{w_\mathrm{SLS} \cdot L^4}{E \cdot I_p}
     \label{eq:constr_defl}
@@ -336,7 +336,7 @@ The depth of the rectangular concrete compression block is $x_{pl} = N_{cf}/(0.8
     M_{Rd} = N_{cf} \cdot z / 10^6, \qquad z = h - e_p - \tfrac{1}{2}\,x_{pl}
     \label{eq:comp_mrd_full}
 \end{equation}
-where $e_p$ is the distance from the soffit to the centroid of the effective deck area. The applied sagging moment is $M_{Ed} = \alpha_{M,\mathrm{sag}}\, w_\mathrm{ULS}\, L^2$, where the elastic moment coefficient $\alpha_{M,\mathrm{sag}}$ depends on the number of spans: $\alpha_{M,\mathrm{sag}} = 1/8$ for a single simply-supported span, $9/128$ for the mid-span of a two-span continuous slab, and $0.080$ for the governing end-span of a three-span continuous slab. The corresponding elastic support (hogging) coefficients are $\alpha_{M,\mathrm{hog}} = 0$, $1/8$, and $0.100$ respectively (Table~\ref{tab:moment_coeffs}). Where hogging redistribution is applied at the internal support (Section~\ref{sec:hogging}), the redistributed surplus is added to the sagging demand, so the moment used in the check is $M_{Ed} = \left(\alpha_{M,\mathrm{sag}} + r\,\alpha_{M,\mathrm{hog}}/2\right) w_\mathrm{ULS}\, L^2$, with $r$ the redistribution factor (zero when no redistribution is applied).
+where $e_p$ is the distance from the soffit to the centroid of the effective deck area, $N_{cf}$ is in N/m width, $z$ in mm, and division by $10^6$ converts the product N\,mm/m to kNm/m. The applied sagging moment is $M_{Ed} = \alpha_{M,\mathrm{sag}}\, w_\mathrm{ULS}\, L^2$, where the elastic moment coefficient $\alpha_{M,\mathrm{sag}}$ depends on the number of spans: $\alpha_{M,\mathrm{sag}} = 1/8$ for a single simply-supported span, $9/128$ for the mid-span of a two-span continuous slab, and $0.080$ for the governing end-span of a three-span continuous slab. The corresponding elastic support (hogging) coefficients are $\alpha_{M,\mathrm{hog}} = 0$, $1/8$, and $0.100$ respectively (Table~\ref{tab:moment_coeffs}). Where hogging redistribution is applied at the internal support (Section~\ref{sec:hogging}), the redistributed surplus is added to the sagging demand, so the moment used in the check is $M_{Ed} = \left(\alpha_{M,\mathrm{sag}} + r\,\alpha_{M,\mathrm{hog}}/2\right) w_\mathrm{ULS}\, L^2$, with $r$ the redistribution factor (zero when no redistribution is applied).
 
 \begin{table}[h!]
 \small
@@ -588,7 +588,7 @@ For the \textbf{industrial} scenario, a cement screed (85\,mm) over rock wool in
 \subsection{Environmental impact}
 \label{sec:env_impact}
 %===============================================================
-The environmental impact of each cross-section is quantified as Global Warming Potential per metre of span length (kg\,CO$_2$-eq/m). The assessment covers EN~15804 modules A1--A3 (raw material supply, transport to factory, manufacturing) and modules C1--C4 (deconstruction, transport, waste processing, disposal). Modules A4--A5, B1--B7, and D are excluded as they introduce project-specific assumptions incompatible with early-stage comparative assessment.
+The environmental impact of each cross-section is quantified as Global Warming Potential per metre of span length (kg\,CO$_2$eq/m). The assessment covers EN~15804 modules A1--A3 (raw material supply, transport to factory, manufacturing) and modules C1--C4 (deconstruction, transport, waste processing, disposal). Modules A4--A5, B1--B7, and D are excluded as they introduce project-specific assumptions incompatible with early-stage comparative assessment.
 
 The structural GWP is computed as the sum of four material contributions:
 \begin{equation}
@@ -643,6 +643,8 @@ The outer optimisation loop iterates over all combinations of deck product and c
 
 This preference for unpropped construction reflects standard practice: unpropped casting avoids the cost, programme impact, and load-path complexity of temporary propping, and is the default assumption for composite slab construction wherever the deck can carry the wet-concrete load unaided. The model therefore never selects a propped solution purely on GWP grounds; propped construction appears in the results only where the construction-stage checks are infeasible for all unpropped deck--concrete combinations at the span in question. The propped/unpropped status of every reported optimum is recorded in the output data and indicated on the GWP--span plots.
 
+It follows that, at spans of 3--5\,m where unpropped construction is feasible, the reported composite GWP figures represent the minimum-GWP \emph{unpropped} solution, not the global GWP minimum across all construction methods. The additional GWP cost of this preference---relative to what propped construction would achieve---is quantified in Section~\ref{sec:res_office_gov}.
+
 The RC rectangular slab, RC ribbed slab, and timber cross-sections are optimised using the basin-hopping algorithm from the SciPy optimisation library \citep{RefWorks:wales1997global}, which combines a global stochastic search with a local Powell minimiser. These cross-sections have multiple continuous variables (height, reinforcement diameter) for which a multi-variable global search is appropriate. The composite slab, with its single continuous variable and large outer enumeration over discrete deck--concrete combinations, does not benefit from this approach and converges reliably with the bounded scalar method.
 
 %===============================================================
@@ -665,7 +667,7 @@ The methodology described above relies on a number of simplifying assumptions, s
 SLS deflections are computed using the linear-elastic uncracked transformed section per 4-1-1/9.8.2(7). Tension stiffening and partial cracking are not modelled. This assumption is consistent with the simplified deflection method permitted by EN~1994-1-1 for unpropped composite slabs and is widely used in industry practice \citep{RefWorks:scip359}.
 
 \paragraph{Effective deck area $A_{p,e}$ fallback.}
-The effective cross-sectional area $A_{p,e}$ accounts for local buckling reductions in the deck profile under bending and is normally derived from manufacturer test data. Where the manufacturer technical manual does not publish $A_{p,e}$ explicitly, a conservative fallback is applied: $A_{p,e} = 0.9\,A_p$ for shallow profiles ($h_p < 80$\,mm) and $A_{p,e} = 0.5\,A_p$ for deep profiles ($h_p \ge 80$\,mm) - derived from calculating the average reduction in area from manufacturer data. This fallback affects the computed sagging moment resistance and longitudinal shear resistance and introduces a conservative bias relative to manufacturer software where the test-derived $A_{p,e}$ is used directly.
+The effective cross-sectional area $A_{p,e}$ accounts for local buckling reductions in the deck profile under bending and is normally derived from manufacturer test data. Where the manufacturer technical manual does not publish $A_{p,e}$ explicitly, a conservative fallback is applied: $A_{p,e} = 0.9\,A_p$ for shallow profiles ($h_p < 80$\,mm) and $A_{p,e} = 0.5\,A_p$ for deep profiles ($h_p \ge 80$\,mm), derived from calculating the average reduction in area from manufacturer data (derivation provided in Appendix~\ref{app:ape_derivation}). This fallback affects the computed sagging moment resistance and longitudinal shear resistance and introduces a conservative bias relative to manufacturer software where the test-derived $A_{p,e}$ is used directly.
 
 \paragraph{Vibration check: slab-only, beams excluded.}
 As discussed in Section~\ref{sec:vibration_method}, the vibration check is performed on the isolated slab strip and omits beam participation. For office spans of 6\,m and above, the slab-alone natural frequency may decrease and approach the 3\,Hz threshold, and the full composite floor system --- including beam depth, bay width, and damping --- may govern the SLS design when evaluated per SCI~P354. The implication is that the optimal composite slab depths reported for office occupancy at longer spans may need to be increased if the full vibration check is applied, which would increase the reported GWP. The comparative ranking between slab systems may therefore be more favourable to RC flat slabs at longer office spans than the optimisation results suggest, since RC slabs benefit from higher mass (and consequently lower vibration acceleration response) at the same slab depth.
@@ -676,7 +678,7 @@ As discussed in Section~\ref{sec:vibration_method}, the vibration check is perfo
 For multi-span configurations, the steel deck is assumed to be continuous (lapped) over intermediate supports, in accordance with standard construction practice and SCI~P300 \citep{RefWorks:scip300}. Construction-stage moment coefficients are taken from elastic analysis.
 
 \paragraph{Local resistance checks (construction stage) not implemented.}
-Local resistance checks at supports per EN~1993-1-3 Cl.\,6.1.7 (web crippling and combined bending plus support reaction) are not currently implemented. These checks are not expected to control for the span and load ranges considered.
+Local resistance checks at supports per 3-1-3/6.1.7 (web crippling and combined bending plus support reaction) are not currently implemented. These checks are not expected to control for the span and load ranges considered.
 
 \paragraph{End anchorage omitted.}
 End anchorage by through-deck welded headed studs (4-1-1/9.7.4) is excluded from the longitudinal shear resistance throughout this study. The omission is a deliberate consistency measure rather than a conservative simplification of convenience. The benefit of end anchorage can only be credited within the partial connection method, which requires the characteristic shear bond strength $\tau_{u,Rk}$; it cannot be credited for decks characterised solely by the m--k constants, because the m--k method is empirical and not based on a mechanical model and therefore cannot separate the contribution of mechanical connectors from the measured shear bond \citep{RefWorks:bode1993modern}. Since the deck database contains products characterised by both methods, crediting end anchorage only for the $\tau_u$ decks would introduce an inconsistent basis of comparison---the same physical enhancement would be rewarded for some products and ignored for others purely because of how each manufacturer chose to report its test data. Omitting end anchorage for all decks restores a consistent basis and yields a conservative longitudinal shear resistance in every case. The resistance forgone by this choice is quantified in Appendix~\ref{app:end_anchorage}, which compares the moment capacity with and without end anchorage across all $\tau_u$ decks and presents a worked example for a representative section; the comparison confirms that end anchorage would increase the partial-connection moment resistance, but that omitting it does not alter the principal comparative conclusions, since longitudinal shear rarely governs the optimal sections (Section~\ref{sec:res_gov_office}).
