@@ -329,11 +329,11 @@ Config. & $L$ [m] & Deck & Grade & $h$ [mm] & $\mathrm{GWP}_\mathrm{tot}$ & Prop
 
 \subsubsection{Industrial}
 \label{sec:res_industrial}
-The industrial scenario carries the highest imposed load ($q_k = 7.5$\,kN/m$^2$). The optimal cross-sections for the feasible configurations are listed in Table~\ref{tab:industrial_optima}. Two outcomes distinguish this scenario from the others. First, composite GWP is the highest of any scenario, from 92.0 at 3\,m to 173.2\,kg\,CO$_2$eq/m$^2$ at 9\,m (single span). Second, and more significantly, \textbf{no feasible composite solution exists for the two--span continuous configuration at any span}: under the industrial construction-stage load, the factored wet-concrete weight ($\gamma_Q Q_{k,1c}$) is so large that no deck in the database can carry it over the full span to the permanent supports, even with propped construction reducing the effective sub-span to $L/2$. The governing check in each case is the construction-stage ULS bending resistance of the bare deck. The three-span configuration remains feasible up to 7\,m, where the fire D3 hogging check at the internal support becomes critical; beyond 7\,m no feasible section exists. This infeasibility under industrial loading marks a practical limit of profiled-deck composite construction for that use category.
+The industrial scenario carries the highest imposed load ($q_k = 7.5$\,kN/m$^2$). The optimal cross-sections for all three configurations are listed in Table~\ref{tab:industrial_optima}. Composite GWP is the highest of any scenario, from 92.0 at 3\,m to 173.2\,kg\,CO$_2$eq/m$^2$ at 9\,m (single span). The two-span configuration is feasible at spans of 3--7\,m; hogging governs throughout, transitioning from the fire D3 reduced-section check at 3\,m to composite ULS hogging at 4--7\,m. Beyond 7\,m the elevated imposed load and associated support moment render no deck--reinforcement combination within the depth bound feasible. The three-span configuration shows the same upper limit of 7\,m, again governed by D3 or ULS hogging at the internal supports. Under industrial loading the composite slab's continuous-span range is therefore considerably shorter than in the office scenario, with neither multi-span configuration reaching beyond 7\,m.
 
 \begin{table}[h!]
 \small\centering
-\caption{Optimal composite cross--sections, industrial scenario (two--span infeasible for all spans).}
+\caption{Optimal composite cross--sections, industrial scenario, all span configurations.}
 \label{tab:industrial_optima}
 \begin{tabular}{llcccccl}
 \toprule
@@ -348,8 +348,12 @@ Config. & $L$ [m] & Deck & Grade & $h$ [mm] & $\mathrm{GWP}_\mathrm{tot}$ & Prop
  & 8 & Multideck 146 1.5 & C25/30 & 382 & 151.6 & Yes & SLS deflection \\
  & 9 & Multideck 146 1.5 & C30/37 & 430 & 173.2 & Yes & SLS deflection \\
 \midrule
-\multicolumn{7}{l}{\textit{Two--span: no feasible composite solution at any span (construction-stage}} \\
-\multicolumn{7}{l}{\textit{bending governs; deck capacity exceeded under industrial wet-concrete load).}} \\
+\multirow{5}{*}{Two--span}
+ & 3 & Multideck 80 1.0  & C25/30 & 154 & 74.4  & No  & Fire D3 \\
+ & 4 & ComFlor 60 0.9    & C25/30 & 161 & 82.3  & Yes & ULS hogging \\
+ & 5 & ComFlor 60 0.9    & C25/30 & 204 & 90.7  & Yes & ULS hogging \\
+ & 6 & ComFlor 80 1.2    & C25/30 & 292 & 121.3 & Yes & ULS hogging \\
+ & 7 & Multideck 146 1.5 & C25/30 & 489 & 169.2 & Yes & ULS hogging \\
 \midrule
 \multirow{5}{*}{Three--span}
  & 3 & Multideck 80 1.1  & C25/30 & 151 & 76.0  & No  & Fire D3 \\
@@ -458,4 +462,4 @@ All 37 failures share two features: they are all propped cases, and all occur wh
 \subsection{Summary}
 \label{sec:res_summary}
 %==============================================================================
-The central result of this study is consistent across all four occupancy scenarios, all three span configurations, and the full practical span range: the composite steel--concrete slab carries the highest embodied carbon of the five floor systems compared, exceeding the RC flat baseline by a margin that widens with both span and imposed load, and exceeding the RC ribbed and timber systems by even larger margins. The composite design is governed by SLS deflection (single span) or by hogging at internal supports (continuous spans) over most of the range, with fire and longitudinal shear governing only at the shortest spans; it requires propped construction at spans over 5m for the office range and is altogether infeasible for the two--span industrial case. These findings answer the primary research question directly---on embodied carbon alone, the composite slab does not offer an advantage over reinforced concrete flat slabs---and motivate the discussion in Chapter~\ref{fifthchapter}, where the non--carbon considerations that nonetheless favour composite construction (construction speed, structural depth, service integration, and cost) are examined.
+The central result of this study is consistent across all four occupancy scenarios, all three span configurations, and the full practical span range: the composite steel--concrete slab carries the highest embodied carbon of the five floor systems compared, exceeding the RC flat baseline by a margin that widens with both span and imposed load, and exceeding the RC ribbed and timber systems by even larger margins. The composite design is governed by SLS deflection (single span) or by hogging at internal supports (continuous spans) over most of the range, with fire and longitudinal shear governing only at the shortest spans; it requires propped construction at spans over 5\,m for the office range and, under industrial loading, reaches at most 7\,m in both the two-- and three--span configurations. These findings answer the primary research question directly---on embodied carbon alone, the composite slab does not offer an advantage over reinforced concrete flat slabs---and motivate the discussion in Chapter~\ref{fifthchapter}, where the non--carbon considerations that nonetheless favour composite construction (construction speed, structural depth, service integration, and cost) are examined.
